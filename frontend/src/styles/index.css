@@ -1,0 +1,54 @@
+/* Begin Global Rules */
+img {
+  width: 100%;
+}
+video {
+  width: 100%;
+}
+a {
+  text-decoration: none !important;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.nav-link {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+.nav-link i {
+  margin-right: 5px;
+}
+.nav-link .badge {
+  margin-left: 5px;
+}
+.dropdown-item {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+.dropdown-item i {
+  margin-right: 10px;
+}
+textarea {
+  resize: none !important;
+  height: 150px;
+}
+.btn.btn-secondary:hover {
+  background-color: var(--bs-gray-400);
+}
+#drp-post-btn {
+  background-color: #f7f7f7 !important;
+  color: #000;
+}
+.btn-f-act {
+  font-size: 8px !important;
+  padding: 0px 25px !important;
+}
+.ps-action:hover {
+  background-color: lightgray;
+}
+.ps-action .text-decoration-underline {
+  font-size: 12px;
+}
+/* End Global Rules */
