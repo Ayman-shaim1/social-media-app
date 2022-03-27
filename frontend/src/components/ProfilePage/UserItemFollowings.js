@@ -233,7 +233,11 @@ const UserItemFollowing = ({
             <h6>{user.name}</h6>
             <strong>{user.email}</strong>
           </div>
-          {btns.find((btn) => btn.state === requestState)["button"]}
+          {String(user._id) !== String(userInfo._id) ? (
+            btns.find((btn) => btn.state === requestState)["button"]
+          ) : (
+            <div className="w-25"></div>
+          )}
         </div>
       </Card.Body>
     </Card>

@@ -16,7 +16,7 @@ const FollowingUsersModal = ({ title, showUsers, hideUsers, users,isUserProfile 
             ))}
           </div>
         ) : (
-          <Alert className="p-4" variant="info">
+          <Alert className="p-4" variant="danger">
             <div className="p-4">
               <div className="d-flex justify-content-center">
                 <h5>users not found !</h5>

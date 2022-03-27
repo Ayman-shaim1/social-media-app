@@ -19,14 +19,13 @@ const Alert = ({ alert, hideAlert }) => {
     } else {
       setTop(0);
     }
-    setTimeout(() => hideAlert(), 4000);
-  }, [alert.show, hideAlert]);
+  }, [alert.show]);
 
   return (
     <>
-      <div className={`m-alert-overlay ${alert.show && "open"}`}></div>
+      <div className={`m-alert-overlay ${alert.show ? "open" : ""}`}></div>
       <div
-        className={`m-alert ${alert.show && "open"}`}
+        className={`m-alert ${alert.show ? "open" : ""}`}
         style={{
           top: `calc(${top}px + 50%)`,
         }}>

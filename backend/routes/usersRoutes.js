@@ -15,6 +15,7 @@ import {
   updateAvatarUser,
   updateNameUser,
   updatePassswordUser,
+  checkFollowRequestUser,
 } from "../controllers/userController.js";
 import { protect } from "../middlewares/authMidlleware.js";
 
@@ -27,6 +28,10 @@ router.route("/name").put(protect, updateNameUser);
 router.route("/password").put(protect, updatePassswordUser);
 
 router.route("/followers/requests").get(protect, getFollowersRequestsUsers);
+router
+  .route("/followers/requests/check/:id")
+  .get(protect, checkFollowRequestUser);
+
 router.route("/:id").get(protect, getUser);
 router.route("/find/:arg").get(protect, findUsers);
 router.route("/login").post(authUser);

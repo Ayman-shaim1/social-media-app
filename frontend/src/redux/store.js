@@ -19,6 +19,7 @@ import {
   userChangeNameReducer,
   userChangeAvatarReducer,
   userChangePasswordReducer,
+  userCheckFollowReducer,
 } from "./user/userReducers";
 
 import {
@@ -32,6 +33,13 @@ import {
   postUnlikeReducer,
 } from "./post/postReducers";
 
+import {
+  notificationDeleteReducer,
+  notificationListReducer,
+  notificationSeenReducer,
+  notificationSendReducer,
+} from "./notification/notificationReducers";
+
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
@@ -43,6 +51,7 @@ const initialState = {
 const reducer = combineReducers({
   alert: alertReducer,
   dialog: dialogReducer,
+
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userById: userByIdReducer,
@@ -53,9 +62,11 @@ const reducer = combineReducers({
   userRejectFollow: userRejectFollowReducer,
   userUnFollow: userUnFollowReducer,
   userChangeName: userChangeNameReducer,
-  userRemoveFollow:userRemoveFollowReducer,
+  userRemoveFollow: userRemoveFollowReducer,
   userChangePassword: userChangePasswordReducer,
   userChangeAvatar: userChangeAvatarReducer,
+  userCheckFollow: userCheckFollowReducer,
+  
   postList: postListReducer,
   postCreate: postCreateReducer,
   postAddComment: postAddCommentReducer,
@@ -64,6 +75,11 @@ const reducer = combineReducers({
   postDelete: postDeleteReducer,
   postLike: postLikeReducer,
   postUnlike: postUnlikeReducer,
+
+  notificationDelete: notificationDeleteReducer,
+  notificationList: notificationListReducer,
+  notificationSeen: notificationSeenReducer,
+  notificationSend: notificationSendReducer,
 });
 
 const store = createStore(

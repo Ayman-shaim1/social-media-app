@@ -7,7 +7,7 @@ const Dialog = ({ dialog, hideDialog }) => {
   const [top, setTop] = useState(0);
   const yesHandler = () => {
     hideDialog();
-    dialog.onYes();
+    if (dialog.onYes) dialog.onYes();
   };
   const noHandler = () => {
     hideDialog();
@@ -24,12 +24,13 @@ const Dialog = ({ dialog, hideDialog }) => {
 
   return (
     <>
-      <div className={`m-dialog-overlay ${dialog.show && "open"}`}></div>
+      <div className={`m-dialog-overlay ${dialog.show ? "open" : ""}`}></div>
       <div
-        className={`m-dialog ${dialog.show && "open"}`}
+        className={`m-dialog ${dialog.show ? "open" : ""}`}
         style={{
           top: `calc(${top}px + 50%)`,
         }}>
+          
         <div className="d-flex justify-content-center">
           <span className="m-dialog-icon text-primary">
             <i className="fa-solid fa-question"></i>

@@ -31,7 +31,31 @@ app.use("/api/upload", uploadRoutes);
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
-app.get("/", (req, res) => res.json({ message: "API is running..." }));
+if (process.env.NODE_ENV === "production") {
+  const staticFolder = express.static(
+    path.resolve(__dirname, "frontend", "build")
+  );
+  app.use(staticFolder);
+  const buildFolder = path.join(__dirname, "frontend", "build");
+  app.get("*", (req, res) => {
+    if (fs.existsSync(buildFolder)) {
+      const indexFile = path.resolve(
+        __dirname,
+        "frontend",
+        "build",
+        "index.html"
+      );
+      res.sendFile(indexFile);
+    } else {
+      res.send({
+        message: "build folder not found !",
+        path: buildFolder,
+      });
+    }
+  });
+} else {
+  app.get("/", (req, res) => res.send("API is running..."));
+}
 
 // Init Error Middlewares :
 app.use(notFound);

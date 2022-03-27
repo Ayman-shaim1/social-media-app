@@ -86,6 +86,7 @@
   text-align: justify;
   color: gray;
 }
+
 @keyframes alertopen {
   20% {
     left: 49%;
@@ -182,3 +183,80 @@
 }
 
 /* End Dialog */
+
+/* Begin Notifications dropdown */
+.drp-notificatons {
+  z-index: 10000;
+  background-color: #fff;
+  width: 400px;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #f7f7f7;
+  top: 80%;
+  right: 10%;
+}
+.drp-notificatons .drp-notifications-item-header .btn {
+  transition: none;
+}
+
+.drp-notificatons-item .drp-notifications-item-header {
+  margin-top: -8px;
+  margin-bottom: -5px;
+}
+.drp-notificatons-item small {
+  font-size: 11px;
+  text-transform: lowercase;
+}
+.drp-notificatons-item small a {
+  text-decoration: underline !important;
+  font-size: 12px;
+  color: #000;
+}
+.drp-notificatons-item.active small a {
+  color: #fff !important;
+}
+
+.drp-notificatons .drp-notificatons-item .btn-delete-notification {
+  cursor: pointer;
+}
+
+@media (min-width: 400px) {
+  .drp-notificatons {
+    top: 60%;
+    right: 15%;
+  }
+}
+
+/* End Notifications dropdown */
+
+/* Begin User search DropDown */
+.drp-users {
+  top: 80%;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #f7f7f7;
+  height: 350px;
+  overflow-y: auto;
+  width: 350px;
+}
+.drp-users .drp-user-item {
+  font-size: 10px;
+  cursor: pointer;
+}
+.drp-users .drp-user-item .card {
+  border: none;
+  border-bottom: 1px solid #f7f7f7;
+  width: 350px;
+}
+.drp-users .drp-user-item :hover {
+  background-color: #f7f7f7;
+}
+.drp-users .drp-user-item div a {
+  margin-right: 50px;
+}
+@media (max-width: 400px) {
+  .drp-users {
+    top: 35%;
+  }
+}
+/* End User search DropDown */

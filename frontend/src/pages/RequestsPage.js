@@ -50,8 +50,8 @@ const RequestsPage = ({
 
   return (
     <Row>
-      <Col xl={2} lg={2} md={2} sm={12}></Col>
-      <Col xl={8} lg={8} md={8} sm={12}>
+      <Col xl={3} lg={3} md={2} sm={12}></Col>
+      <Col xl={6} lg={6} md={8} sm={12}>
         {userRequestsLoading && <Loader />}
         {users.length > 0 ? (
           users.map((user) => <RequestItem user={user.user} key={user._id} />)
@@ -68,7 +68,7 @@ const RequestsPage = ({
           </Alert>
         )}
       </Col>
-      <Col xl={2} lg={2} md={2} sm={12}></Col>
+      <Col xl={3} lg={3} md={2} sm={12}></Col>
     </Row>
   );
 };

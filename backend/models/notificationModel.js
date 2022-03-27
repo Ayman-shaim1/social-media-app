@@ -9,11 +9,9 @@ const notificationSchema = Schema({
   },
   title: {
     type: String,
-    required: true,
   },
   text_content: {
     type: String,
-    required: true,
   },
   date: {
     type: Date,

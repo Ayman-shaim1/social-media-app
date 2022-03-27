@@ -40,6 +40,11 @@ const userSchema = Schema({
         required: true,
         default: false,
       },
+      date: {
+        type: Date,
+        required: true,
+        default: Date.now,
+      },
     },
   ],
   following: [
@@ -53,6 +58,11 @@ const userSchema = Schema({
         type: Boolean,
         required: true,
         default: false,
+      },
+      date: {
+        type: Date,
+        required: true,
+        default: Date.now,
       },
     },
   ],

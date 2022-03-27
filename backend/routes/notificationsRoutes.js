@@ -9,12 +9,12 @@ import {
 
 const router = express.Router();
 
-router
-  .route("/")
-  .post(protect, createNotification)
-  .get(protect, getNotifications);
-
+router.route("/").get(protect, getNotifications);
 router.route("/seen").put(protect, seenNotifications);
-router.route("/:id").put(protect, deleteNotification);
+
+router
+  .route("/:id")
+  .post(protect, createNotification)
+  .put(protect, deleteNotification);
 
 export default router;

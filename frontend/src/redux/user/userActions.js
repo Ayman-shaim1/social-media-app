@@ -51,8 +51,14 @@ import {
   USER_REMOVE_FOLLOWING_REQUEST,
   USER_REMOVE_FOLLOWING_RESET,
   USER_REMOVE_FOLLOWING_SUCCESS,
+  USER_CHECK_FOLLOW_FAIL,
+  USER_CHECK_FOLLOW_REQUEST,
+  USER_CHECK_FOLLOW_RESET,
+  USER_CHECK_FOLLOW_SUCCESS,
 } from "./userTypes";
 import { POST_LIST_RESET } from "../post/postTypes";
+
+import { sendNotification } from "../notification/notificationActions";
 
 import axios from "axios";
 
@@ -119,6 +125,13 @@ export const register = (name, email, avatar, password) => {
         dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
         dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
         localStorage.setItem("userInfo", JSON.stringify(data));
+        dispatch(
+          sendNotification(
+            data._id,
+            `welcome ${data.name}`,
+            `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet, autem eligendi! Tenetur excepturi quis enim doloribus repellat culpa facere ea?`
+          )
+        );
       } else {
         const { data } = await axios.post(
           "/api/users",
@@ -128,6 +141,14 @@ export const register = (name, email, avatar, password) => {
         dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
         dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
         localStorage.setItem("userInfo", JSON.stringify(data));
+
+        dispatch(
+          sendNotification(
+            data._id,
+            `welcome ${data.name}`,
+            `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet, autem eligendi! Tenetur excepturi quis enim doloribus repellat culpa facere ea?`
+          )
+        );
       }
     } catch (error) {
       const err =
@@ -215,6 +236,13 @@ export const followUser = (id) => {
       };
       const { data } = await axios.post(`/api/users/follow/${id}`, {}, config);
       dispatch({ type: USER_FOLLOW_SUCCESS, payload: data });
+      dispatch(
+        sendNotification(
+          id,
+          `${userInfo.name} want to follow you`,
+          `This user ${userInfo.name} want to follow you vist the <a href="/profile/${userInfo._id}">profile</a> of this user`
+        )
+      );
     } catch (error) {
       const err =
         error.response && error.response.data.message
@@ -224,6 +252,39 @@ export const followUser = (id) => {
     }
   };
 };
+
+export const checkFollowRequestUser = (id) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: USER_CHECK_FOLLOW_REQUEST });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          authorization: `Bearer ${userInfo.token} `,
+        },
+      };
+      const { data } = await axios.get(
+        `/api/users/followers/requests/check/${id}`,
+        config
+      );
+      dispatch({ type: USER_CHECK_FOLLOW_SUCCESS, payload: data });
+    } catch (error) {
+      const err =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({ type: USER_CHECK_FOLLOW_FAIL, payload: err });
+    }
+  };
+};
+
+export const resetCheckFollowRequestUser = () => {
+  return { type: USER_CHECK_FOLLOW_RESET };
+};
+
 export const unFollowUser = (id) => {
   return async (dispatch, getState) => {
     try {

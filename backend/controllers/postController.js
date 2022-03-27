@@ -118,7 +118,7 @@ export const likePost = asyncHandler(async (req, res) => {
     post.likes.unshift({ user: req.user.id });
     await post.save();
 
-    res.json(post.likes);
+    res.json({ likes: post.likes, _id: post.user });
   } else {
     res.status(404);
     throw new Error("Post not found");
@@ -166,7 +166,7 @@ export const addCommentToPost = asyncHandler(async (req, res) => {
       post.comments.unshift(newComment);
       await post.save();
 
-      res.json(post.comments);
+      res.json({ comments: post.comments, _id: post.user });
     } else {
       res.status(404);
       throw new Error("Post not found !");

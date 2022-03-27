@@ -3,17 +3,18 @@ import User from "../models/userModel.js";
 import Notification from "../models/notificationModel.js";
 
 // @desc    Create notification
-// @route   POST /api/notifications
+// @route   POST /api/notifications/:id
 // @access  Private
 export const createNotification = asyncHandler(async (req, res) => {
-  const connectedUser = await User.findById(req.user.id);
+  const user = await User.findById(req.params.id);
+
   const newNotification = await Notification.create({
-    user: connectedUser._id,
+    user: user._id,
     title: req.body.title,
     text_content: req.body.text_content,
   });
-  connectedUser.notifications.push({ notification: newNotification._id });
-  await connectedUser.save();
+  user.notifications.push({ notification: newNotification._id });
+  await user.save();
   res.json(newNotification);
 });
 
@@ -24,6 +25,11 @@ export const getNotifications = asyncHandler(async (req, res) => {
   const connectedUser = await User.findById(req.user.id).populate(
     "notifications.notification"
   );
+
+  connectedUser.notifications.sort((a, b) => {
+    return b.notification.date - a.notification.date;
+  });
+
   res.json(connectedUser.notifications);
 });
 

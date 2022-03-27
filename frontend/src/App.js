@@ -54,15 +54,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
-              exact
-              path="/find-friends"
-              element={
-                <ProtectedRoute>
-                  <FindFriendsPage />
-                </ProtectedRoute>
-              }
-            />
+
             <Route
               exact
               path="/requests"
@@ -72,6 +64,17 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              exact
+              path="/find-friends"
+              element={
+                <ProtectedRoute>
+                  <FindFriendsPage />
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               exact
               path="/findfriends"
@@ -81,6 +84,27 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              exact
+              path="/find-friends/:search"
+              element={
+                <ProtectedRoute>
+                  <FindFriendsPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              exact
+              path="/findfriends/:search"
+              element={
+                <ProtectedRoute>
+                  <FindFriendsPage />
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               exact
               path="/Messages"

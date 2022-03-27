@@ -5,11 +5,14 @@ import { connect } from "react-redux";
 import useAlert from "../hooks/useAlert";
 import { findUsers } from "../redux/user/userActions";
 import Loader from "../components/Loader";
+import { useParams } from "react-router-dom";
 const FindFriendsPage = ({ findUsers, userFind }) => {
   // hooks :
   const showAlert = useAlert();
+  const params = useParams();
   // states :
   const [search, setSearch] = useState("");
+  const [isCallApi, setIsCallApi] = useState(false);
   // redux States :
   const { loading, error, users } = userFind;
 
@@ -19,6 +22,14 @@ const FindFriendsPage = ({ findUsers, userFind }) => {
   };
 
   useEffect(() => {
+    if (!isCallApi) {
+      if (params.search) {
+        setSearch(params.search);
+        findUsers(params.search);
+        setIsCallApi(true);
+      }
+    }
+
     if (error) {
       showAlert({
         type: "danger",
@@ -26,7 +37,7 @@ const FindFriendsPage = ({ findUsers, userFind }) => {
         content: error,
       });
     }
-  }, [showAlert, error]);
+  }, [findUsers, showAlert, error, params, isCallApi]);
 
   return (
     <Row>

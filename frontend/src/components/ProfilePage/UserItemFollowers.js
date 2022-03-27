@@ -215,7 +215,7 @@ const UserItemFollowers = ({
     },
     {
       state: "",
-      button: <div></div>,
+      button: <div className="w-25"></div>,
     },
   ];
 
@@ -315,7 +315,7 @@ const UserItemFollowers = ({
           {String(user._id) !== String(userInfo._id) ? (
             btns.find((btn) => btn.state === requestState)["button"]
           ) : (
-            <div></div>
+            <div className="w-25"></div>
           )}
         </div>
       </Card.Body>

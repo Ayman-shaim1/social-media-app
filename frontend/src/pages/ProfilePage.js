@@ -26,6 +26,7 @@ import Loader from "../components/Loader";
 
 import FollowersUsersModal from "../components/ProfilePage/FollowersUsersModal";
 import FollowingUsersModal from "../components/ProfilePage/FollowingUsersModal";
+import ProfileUserFollowRequest from "../components/ProfilePage/ProfileUserFollowRequest";
 
 const ProfilePage = ({
   userLogin,
@@ -192,9 +193,26 @@ const ProfilePage = ({
       resetGetByIdUser();
       getByIdUser(params.id);
       setCallApi(true);
+      setShowFollowers(false);
+      setShowFollowing(false);
+      setIsRequestChecked(false);
     }
 
+    if (user && String(user._id) !== params.id) {
+      getByIdUser(params.id);
+      setShowFollowers(false);
+      setShowFollowing(false);
+      setIsRequestChecked(false);
+    }
     if (user && userInfo) {
+      if (String(userInfo._id) === String(user._id)) {
+        setIsAccessible(true);
+      }
+
+      if (!user.isPrivateAccount) {
+        setIsAccessible(true);
+      }
+
       setNbrFollowers(user.followers.filter((u) => u.isAccepted).length);
       setNbrFollowing(user.following.filter((u) => u.isAccepted).length);
 
@@ -274,11 +292,9 @@ const ProfilePage = ({
       }
     }
 
-
-return () => {
-  
-}
-
+    // return () => {
+    //   resetGetByIdUser();
+    // };
   }, [
     showAlert,
     params,
@@ -310,30 +326,40 @@ return () => {
           ) : (
             user && (
               <>
+                <ProfileUserFollowRequest user={user} />
                 <Alert variant="info">
+                  {String(userInfo._id) === String(user._id) && (
+                    <div className="d-flex justify-content-end position-relative">
+                      <Link to="/settings" className="position-absolute">
+                        <i className="fas fa-gear text-secondary "></i>
+                      </Link>
+                    </div>
+                  )}
                   <div className="d-flex justify-content-center">
                     <Avatar image={user.avatar} size="xl" />
                   </div>
-
                   <div className="d-flex justify-content-center mt-2">
                     <h3>{user.name}</h3>
                   </div>
-
                   <div className="d-flex justify-content-center">
                     <h5
-                      onClick={() => setShowFollowers(true)}
+                      onClick={() => {
+                        if (isAccessible) setShowFollowers(true);
+                      }}
                       className="m-2 cursor-pointer">
                       {nbrFollowers} Followers
                     </h5>
                     <h5
-                      onClick={() => setShowFollowing(true)}
+                      onClick={() => {
+                        if (isAccessible) setShowFollowing(true);
+                      }}
                       className="m-2 cursor-pointer">
                       {nbrFollowing} Following
                     </h5>
                     <FollowersUsersModal
                       showUsers={showFollowers}
                       hideUsers={() => setShowFollowers(false)}
-                      users={user.followers}
+                      users={user.followers.filter((u) => u.isAccepted)}
                       isUserProfile={
                         user &&
                         userInfo &&
@@ -343,10 +369,9 @@ return () => {
                     <FollowingUsersModal
                       showUsers={showFollowing}
                       hideUsers={() => setShowFollowing(false)}
-                      users={user.following}
+                      users={user.following.filter((u) => u.isAccepted)}
                     />
                   </div>
-
                   {String(userInfo._id) !== String(user._id) && (
                     <>
                       <hr />

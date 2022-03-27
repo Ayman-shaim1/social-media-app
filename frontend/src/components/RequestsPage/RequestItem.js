@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import Avatar from "../Avatar";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import useAlert from "../../hooks/useAlert";
 import Loader from "../Loader";
 import {
@@ -15,6 +15,9 @@ import {
   resetFollowUser,
   resetUnFollowUser,
 } from "../../redux/user/userActions";
+
+import { USER_GET_REQUESTS_UPDATE_REMOVE } from "../../redux/user/userTypes";
+
 const RequestItem = ({
   user,
   acceptRequestUser,
@@ -27,7 +30,6 @@ const RequestItem = ({
   userUnFollow,
   resetRejectRequestUser,
   resetAcceptRequestUser,
-  reset,
 }) => {
   // hooks :
   const showAlert = useAlert();
@@ -38,12 +40,18 @@ const RequestItem = ({
   const [loadingAccept, setLoadingAccept] = useState(false);
   const [accept, setAccept] = useState(false);
 
+  const dispatch = useDispatch();
+
   // redux states :
-  const { error: userAcceptFollowError, success: userAcceptFollowSuccess } =
-    userAcceptFollow;
+  const {
+    error: userAcceptFollowError,
+    success: userAcceptFollowSuccess,
+    resUserAccept,
+  } = userAcceptFollow;
 
   const { error: userRejectFollowError, success: userRejectFollowSuccess } =
     userRejectFollow;
+
   const {
     error: userFollowError,
     success: userFollowSuccess,
@@ -82,7 +90,7 @@ const RequestItem = ({
           placement="top"
           overlay={<Tooltip>follow this user</Tooltip>}>
           <Button
-            disabled={loading && true}
+            disabled={(loadingAccept || loadingReject) && true}
             size="sm"
             variant="primary"
             onClick={() => followUserHandler(user._id)}>
@@ -104,7 +112,7 @@ const RequestItem = ({
           placement="top"
           overlay={<Tooltip>you already sent a request to this user</Tooltip>}>
           <Button
-            disabled={loading && true}
+            disabled={(loadingAccept || loadingReject) && true}
             size="sm"
             variant="light"
             className="text-info"
@@ -145,8 +153,17 @@ const RequestItem = ({
 
     if (userAcceptFollowSuccess) {
       setLoadingAccept(false);
-      setAccept(true);
-      resetAcceptRequestUser();
+      if (String(resUserAccept._id) === String(user._id)) {
+        if (!resUserAccept.isFollow) {
+          setAccept(true);
+        } else {
+          dispatch({
+            type: USER_GET_REQUESTS_UPDATE_REMOVE,
+            payload: user._id,
+          });
+        }
+        resetAcceptRequestUser();
+      }
     }
 
     if (userRejectFollowSuccess) {
@@ -178,7 +195,6 @@ const RequestItem = ({
       setLoading(false);
       if (String(resFollow._id) === String(user._id)) {
         setRequestState("sent");
-        resetFollowUser();
       }
     }
 
@@ -186,17 +202,25 @@ const RequestItem = ({
       setLoading(false);
       if (String(resUnFollow._id) === String(user._id)) {
         setRequestState("follow");
-        resetUnFollowUser();
       }
     }
   }, [
+    resUserAccept,
     accept,
+    dispatch,
     loadingAccept,
     loadingReject,
     userRejectFollowError,
     userAcceptFollowError,
     userRejectFollowSuccess,
     userAcceptFollowSuccess,
+    resUnFollow,
+    resFollow,
+    user,
+    userFollowSuccess,
+    userFollowError,
+    userUnFollowSuccess,
+    userUnFollowError,
     showAlert,
     resetRejectRequestUser,
     resetAcceptRequestUser,
@@ -217,33 +241,37 @@ const RequestItem = ({
             {!accept ? (
               <>
                 <OverlayTrigger
-                  placement="left"
+                  placement="top"
                   overlay={<Tooltip>Accept user request</Tooltip>}>
                   <Button
                     size="sm"
-                    variant="success"
+                    variant="light"
+                    className="text-success"
+                    disabled={loading && true}
                     onClick={acceptUserHandler}>
                     {loadingAccept ? (
                       <Loader size="sm" />
                     ) : (
                       <>
-                        <i className="fas fa-user-plus"></i> accept user
+                        <i className="fas fa-user-plus"></i>
                       </>
                     )}
                   </Button>
                 </OverlayTrigger>
                 <OverlayTrigger
-                  placement="right"
+                  placement="top"
                   overlay={<Tooltip>Reject user request</Tooltip>}>
                   <Button
                     size="sm"
-                    variant="danger"
+                    variant="light"
+                    className="text-danger"
+                    disabled={loading && true}
                     onClick={rejectUserHandler}>
                     {loadingReject ? (
                       <Loader size="sm" />
                     ) : (
                       <>
-                        <i className=" fa-solid fa-user-xmark"></i> reject user
+                        <i className=" fa-solid fa-user-xmark"></i>
                       </>
                     )}
                   </Button>

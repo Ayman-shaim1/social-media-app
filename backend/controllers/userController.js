@@ -165,6 +165,10 @@ export const getUser = asyncHandler(async (req, res) => {
   if (user) {
     const posts = await Post.find({ user: req.params.id }).populate("user");
 
+    posts.sort((a, b) => {
+      return b.date - a.date;
+    });
+
     res.json({ ...user._doc, posts: posts });
   } else {
     res.status(404);
@@ -177,9 +181,19 @@ export const getUser = asyncHandler(async (req, res) => {
 // @access  private
 export const findUsers = asyncHandler(async (req, res) => {
   const users = await User.find({
-    $or: [
-      { email: { $regex: req.params.arg.toLowerCase(), $options: "i" } },
-      { name: { $regex: req.params.arg, $options: "i" } },
+    $and: [
+      {
+        $or: [
+          { email: { $regex: req.params.arg.toLowerCase(), $options: "i" } },
+          { name: { $regex: req.params.arg, $options: "i" } },
+        ],
+      },
+      {
+        $or: [
+          { email: { $ne: req.user.email } },
+          { name: { $ne: req.user.name } },
+        ],
+      },
     ],
   }).select("-password -notifications");
   res.json(users);
@@ -213,6 +227,32 @@ export const followUser = asyncHandler(async (req, res) => {
         _id: user._id,
         followers: user.followers,
         following: user.following,
+      });
+    }
+  } else {
+    res.status(404);
+    throw new Error("user not found");
+  }
+});
+
+// @desc    Follow other user
+// @route   GET /api/users/followers/requests/check/:id
+// @access  Private
+export const checkFollowRequestUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    const index = user.following.findIndex(
+      (u) => String(u.user) === String(req.user.id) && !u.isAccepted
+    );
+    if (index === -1) {
+      res.json({
+        message: "no this user is not trying to follow you",
+        isRequest: false,
+      });
+    } else {
+      res.json({
+        message: "yes this user try to follow you",
+        isRequest: true,
       });
     }
   } else {
@@ -288,7 +328,15 @@ export const acceptUser = asyncHandler(async (req, res) => {
       });
       user.save();
       connectedUser.save();
-      res.json(user);
+
+      const isFollow =
+        user.followers.findIndex(
+          (u) => String(u.user) === String(req.user.id)
+        ) !== -1
+          ? true
+          : false;
+
+      res.json({ _id: user._id, isFollow });
     } else {
       res.status(400);
       throw new Error("this user is not asking for following you");
@@ -373,9 +421,15 @@ export const removeFollowingUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users/followers/requests
 // @access  Private
 export const getFollowersRequestsUsers = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id).populate("followers.user");
+  const user = await User.findById(req.user.id)
+    .select("-password -notifications")
+    .populate("followers.user");
+
   if (user) {
-    const requests = user.followers.filter((u) => !u.isAccepted);
+    let requests = user.followers.filter((u) => !u.isAccepted);
+    requests = requests.sort((a, b) => {
+      return b.date - a.date;
+    });
     res.json(requests);
   } else {
     res.status(404);

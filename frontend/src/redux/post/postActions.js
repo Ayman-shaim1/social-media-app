@@ -39,6 +39,9 @@ import {
   POST_UNLIKE_RESET,
   POST_UNLIKE_SUCCESS,
 } from "./postTypes";
+
+import { sendNotification } from "../notification/notificationActions";
+
 import axios from "axios";
 
 export const getPosts = () => {
@@ -213,8 +216,18 @@ export const likePost = (id) => {
       dispatch({ type: POST_LIKE_SUCCESS, payload: data });
       dispatch({
         type: POST_LIST_UPDATE_LIKE,
-        payload: { id: id, likes: data },
+        payload: { id: id, likes: data.likes },
       });
+
+      if (String(data._id) !== String(userInfo._id)) {
+        dispatch(
+          sendNotification(
+            data._id,
+            `${userInfo.name} liked your post`,
+            `<a href="/profile/${userInfo._id}">${userInfo.name}</a> liked your <a href="/post/${id}">Post</a>`
+          )
+        );
+      }
     } catch (error) {
       const err =
         error.response && error.response.data.message
@@ -286,11 +299,20 @@ export const commentPost = (id, text) => {
         config
       );
       dispatch({ type: POST_ADD_COMMENT_SUCCESS, payload: data });
-      dispatch({ type: POST_GET_BY_ID_UPDATE_COMMENT, payload: data });
+      dispatch({ type: POST_GET_BY_ID_UPDATE_COMMENT, payload: data.comments });
       dispatch({
         type: POST_GET_LIST_UPDATE_COMMENT,
-        payload: { id: id, comments: data },
+        payload: { id: id, comments: data.comments },
       });
+      if (String(data._id) !== String(userInfo._id)) {
+        dispatch(
+          sendNotification(
+            data._id,
+            `${userInfo.name} commented on your post`,
+            `<a href="/profile/${userInfo._id}">${userInfo.name}</a> commented on your <a href="/post/${id}">Post</a>`
+          )
+        );
+      }
     } catch (error) {
       const err =
         error.response && error.response.data.message

@@ -51,6 +51,11 @@ import {
   USER_REMOVE_FOLLOWING_REQUEST,
   USER_REMOVE_FOLLOWING_RESET,
   USER_REMOVE_FOLLOWING_SUCCESS,
+  USER_CHECK_FOLLOW_FAIL,
+  USER_CHECK_FOLLOW_REQUEST,
+  USER_CHECK_FOLLOW_RESET,
+  USER_CHECK_FOLLOW_SUCCESS,
+  USER_CHECK_FOLLOW_UPDATE_REMOVE,
 } from "./userTypes";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -135,6 +140,30 @@ export const userFollowReducer = (state = {}, action) => {
   }
 };
 
+export const userCheckFollowReducer = (state = {}, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case USER_CHECK_FOLLOW_REQUEST:
+      return { loading: true };
+    case USER_CHECK_FOLLOW_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        resCheckFollowRequest: payload,
+      };
+    case USER_CHECK_FOLLOW_UPDATE_REMOVE:
+      return {
+        resCheckFollowRequest: { isRequest: false },
+      };
+    case USER_CHECK_FOLLOW_FAIL:
+      return { loading: false, error: payload };
+    case USER_CHECK_FOLLOW_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
 export const userUnFollowReducer = (state = {}, action) => {
   const { type, payload } = action;
   switch (type) {
@@ -161,12 +190,11 @@ export const userUnFollowReducer = (state = {}, action) => {
 const userRequestsUpdate = (state, payload) => {
   const newUsers = [];
   for (let i = 0; i < state.users.length; i++) {
-    if (String(state.users[i]._id) !== String(payload))
+    if (String(state.users[i].user._id) !== String(payload)) {
       newUsers.push(state.users[i]);
+    }
   }
-  
-  state.users = newUsers;
-  return state.users;
+  return newUsers;
 };
 
 export const userRequestsReducer = (state = { users: [] }, action) => {
@@ -196,7 +224,7 @@ export const userAcceptFollowReducer = (state = {}, action) => {
     case USER_ACCEPT_FOLLOW_REQUEST:
       return { loading: true };
     case USER_ACCEPT_FOLLOW_SUCCESS:
-      return { loading: false, success: true };
+      return { loading: false, success: true, resUserAccept: payload };
     case USER_ACCEPT_FOLLOW_FAIL:
       return { loading: false, error: payload };
     case USER_ACCEPT_FOLLOW_RESET:
