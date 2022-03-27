@@ -84,8 +84,8 @@ export const deletePost = asyncHandler(async (req, res) => {
         const filepath = path.join(__dirname, post.media_url);
         fs.unlink(filepath, async (err) => {
           if (err) {
-            res.status(404);
-            throw new Error("avatar not found !");
+            await post.remove();
+            return res.json({ message: "Post removed !" });
           } else {
             await post.remove();
             return res.json({ message: "Post removed !" });
