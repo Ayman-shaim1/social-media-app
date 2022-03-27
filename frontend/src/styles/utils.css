@@ -220,10 +220,10 @@
   cursor: pointer;
 }
 
-@media (min-width: 400px) {
+@media (max-width: 900px) {
   .drp-notificatons {
     top: 60%;
-    right: 15%;
+    right: 10%;
   }
 }
 

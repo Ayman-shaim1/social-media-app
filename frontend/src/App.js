@@ -32,7 +32,7 @@ const App = () => {
       <main className="p-2">
         <Alert />
         <Dialog />
-        <Container>
+        <Container fluid>
           <Routes>
             <Route exact path="/Login" element={<LoginPage />} />
             <Route exact path="/Register" element={<RegisterPage />} />
