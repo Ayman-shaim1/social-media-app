@@ -188,12 +188,12 @@
 .drp-notificatons {
   z-index: 10000;
   background-color: #fff;
-  width: 400px;
+  width: 350px;
   max-height: 400px;
   overflow-y: auto;
   border: 1px solid #f7f7f7;
-  top: 60%;
-  right: 10%;
+  top: 62%;
+  right: 5%;
 }
 .drp-notificatons .drp-notificatons-item {
   padding: 15px;
@@ -223,19 +223,32 @@
   cursor: pointer;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 500px) {
   .drp-notificatons {
     top: 60%;
-    right: 40%;
+    right: 20%;
+  }
+}
+@media (min-width: 600px) {
+  .drp-notificatons {
+    top: 60%;
+    right: 35%;
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 768px) {
   .drp-notificatons {
     top: 60%;
-    right: 40%;
+    right: 50%;
   }
 }
+@media (min-width: 822px){
+  .drp-notificatons {
+    top: 60%;
+    right: 50%;
+  }
+}
+
 @media (min-width: 992px) {
   .drp-notificatons {
     top: 60%;
