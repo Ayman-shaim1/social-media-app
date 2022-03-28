@@ -192,8 +192,11 @@
   max-height: 400px;
   overflow-y: auto;
   border: 1px solid #f7f7f7;
-  top: 80%;
+  top: 60%;
   right: 10%;
+}
+.drp-notificatons .drp-notificatons-item {
+  padding: 15px;
 }
 .drp-notificatons .drp-notifications-item-header .btn {
   transition: none;
@@ -220,11 +223,30 @@
   cursor: pointer;
 }
 
-@media (max-width: 400px) {
+@media (min-width: 768px) {
   .drp-notificatons {
     top: 60%;
-    right: 15%;
-    width: 300px;
+    right: 40%;
+  }
+}
+
+@media (min-width: 800px) {
+  .drp-notificatons {
+    top: 60%;
+    right: 40%;
+  }
+}
+@media (min-width: 992px) {
+  .drp-notificatons {
+    top: 60%;
+    right: 10%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .drp-notificatons {
+    top: 60%;
+    right: 10%;
   }
 }
 
@@ -232,32 +254,50 @@
 
 /* Begin User search DropDown */
 .drp-users {
-  top: 80%;
   z-index: 1000;
   background-color: #fff;
   border: 1px solid #f7f7f7;
   height: 350px;
   overflow-y: auto;
   width: 350px;
+  top: 36%;
 }
 .drp-users .drp-user-item {
-  font-size: 10px;
+  font-size: 12px;
   cursor: pointer;
+  text-transform: lowercase;
 }
 .drp-users .drp-user-item .card {
   border: none;
   border-bottom: 1px solid #f7f7f7;
-  width: 350px;
+  width: 100%;
 }
 .drp-users .drp-user-item :hover {
   background-color: #f7f7f7;
 }
-.drp-users .drp-user-item div a {
+.drp-users .drp-user-item div .avatar {
   margin-right: 50px;
 }
-@media (max-width: 400px) {
+.drp-users .drp-user-item .card .card-body div .avatar-container {
+  margin-right: 50px;
+}
+
+/* Small */
+@media (min-width: 768px) {
   .drp-users {
-    top: 35%;
+    top: 36%;
+  }
+}
+/* Medium */
+@media (min-width: 992px) {
+  .drp-users {
+    top: 70%;
+  }
+}
+/* Large */
+@media (min-width: 1200px) {
+  .drp-users {
+    top: 80%;
   }
 }
 /* End User search DropDown */

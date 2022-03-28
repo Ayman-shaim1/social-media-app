@@ -14,7 +14,7 @@ import {
 import Loader from "../components/Loader";
 import useAlert from "../hooks/useAlert";
 import Avatar from "../components/Avatar";
-import { Card, Col, Row, Dropdown, Alert } from "react-bootstrap";
+import { Card, Col, Row, Dropdown, Alert, Image } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import CommentItem from "../components/PostPage/CommentItem";
 import AddComment from "../components/PostPage/AddComment";
@@ -221,8 +221,17 @@ const PostPage = ({
                   </Card.Header>
                   <Card.Body>
                     {post.text && <p>{post.text}</p>}
-                    {post.media_url && (
-                      <img src={post.media_url} alt="post-media" />
+                    {post.media_url &&
+                    String(post.media_url).includes(".mp4") ? (
+                      <video src={post.media_url} controls></video>
+                    ) : (
+                      <Link to={`/post/${post._id}`}>
+                        <Image
+                          src={post.media_url}
+                          className="media-post"
+                          rounded
+                        />
+                      </Link>
                     )}
                   </Card.Body>
                   <Card.Footer>

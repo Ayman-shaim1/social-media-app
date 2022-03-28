@@ -150,7 +150,9 @@ const Post = ({
       </Card.Header>
       <Card.Body>
         {post.text && <p>{post.text}</p>}
-        {post.media_url && (
+        {post.media_url && String(post.media_url).includes(".mp4") ? (
+          <video src={post.media_url} controls></video>
+        ) : (
           <Link to={`/post/${post._id}`}>
             <Image src={post.media_url} className="media-post" rounded />
           </Link>
