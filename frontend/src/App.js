@@ -19,7 +19,6 @@ import SettingsPage from "./pages/SettingsPage";
 import FindFriendsPage from "./pages/FindFriendsPage";
 import RequestsPage from "./pages/RequestsPage";
 import NotFoundPage from "./pages/NotFoundPage";
-
 const App = () => {
   // redux states :
   const userLogin = useSelector((state) => state.userLogin);
@@ -28,10 +27,10 @@ const App = () => {
   return (
     <BrowserRouter>
       {userInfo && <Header />}
-
       <main className="p-2">
         <Alert />
         <Dialog />
+
         <Container fluid>
           <Routes>
             <Route exact path="/Login" element={<LoginPage />} />

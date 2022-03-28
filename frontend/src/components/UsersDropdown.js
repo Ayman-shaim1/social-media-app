@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Alert } from "react-bootstrap";
+import {  Alert, ListGroup } from "react-bootstrap";
 import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -9,7 +9,7 @@ const UsersDropdown = ({ show, userFind, hide }) => {
   const { loading, users } = userFind;
 
   return (
-    <div
+    <ListGroup
       className={`drp-users position-absolute  ${show ? "d-block" : "d-none"}`}>
       {loading ? (
         <div className="mt-5 p-2">
@@ -17,22 +17,17 @@ const UsersDropdown = ({ show, userFind, hide }) => {
         </div>
       ) : users && users.length > 0 ? (
         users.map((user) => (
-          <Link
-            className="drp-user-item"
-            to={`/profile/${user._id}`}
-            onClick={hide}>
-            <Card>
-              <Card.Body>
-                <div className="d-flex align-items-center">
-                  <Avatar image={user.avatar} />
-                  <div className="d-flex flex-column ">
-                    <h6>{user.name}</h6>
-                    <span>{user.email}</span>
-                  </div>
+          <ListGroup.Item key={user.key} className="drp-user-item">
+            <Link to={`/profile/${user._id}`} onClick={hide}>
+              <div className="d-flex align-items-center">
+                <Avatar image={user.avatar} />
+                <div className="d-flex flex-column ">
+                  <h6 className="m-0">{user.name}</h6>
+                  <span>{user.email}</span>
                 </div>
-              </Card.Body>
-            </Card>
-          </Link>
+              </div>
+            </Link>
+          </ListGroup.Item>
         ))
       ) : (
         <div className="p-3 mt-4">
@@ -48,7 +43,7 @@ const UsersDropdown = ({ show, userFind, hide }) => {
           </Alert>
         </div>
       )}
-    </div>
+    </ListGroup>
   );
 };
 const mapStateToProps = (state) => {
