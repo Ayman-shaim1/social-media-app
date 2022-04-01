@@ -70,17 +70,12 @@ const NotificationsDropDown = ({
           </ListGroup.Item>
         ))
       ) : (
-        <div className="p-3">
-          <Alert variant="danger" className="mt-5">
-            <div className="d-flex justify-content-center">
-              <h1>
-                <i className="fa-solid fa-bell-slash"></i>
-              </h1>
+        <div className="p-3 mt-3">
+          <div className="p-3 mt-4">
+            <div className="d-flex justify-content-center mt-5">
+              <small className="text-secondary">notifications not found</small>
             </div>
-            <div className="d-flex justify-content-center">
-              <h5>No notification exists</h5>
-            </div>
-          </Alert>
+          </div>
         </div>
       )}
     </ListGroup>

@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import useAlert from "../../hooks/useAlert";
 import Loader from "../Loader";
 const AddComment = ({ postId, commentPost, postAddComment }) => {
+  
+  
   // hooks:
   const showAlert = useAlert();
   // states:
@@ -14,8 +16,10 @@ const AddComment = ({ postId, commentPost, postAddComment }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    commentPost(postId, text);
-    setText("");
+    if (text !== "") {
+      commentPost(postId, text);
+      setText("");
+    }
   };
 
   useEffect(() => {

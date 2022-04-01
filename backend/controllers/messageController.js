@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Message from "../models/messageModel.js";
 import User from "../models/userModel.js";
+import mongoose from "mongoose";
 
 // @desc    Send message
 // @route   POST /api/messages/:id
@@ -12,7 +13,7 @@ export const sendMessage = asyncHandler(async (req, res) => {
       const newMessage = new Message({
         message_from: req.user.id,
         message_to: req.params.id,
-        message_content: req.body.message_content || null,
+        message_text: req.body.message_text || null,
         message_post: req.body.message_post || null,
       });
 
@@ -53,21 +54,18 @@ export const getMessages = asyncHandler(async (req, res) => {
   const otherUser = await User.findById(req.params.id);
   if (otherUser) {
     const connectedUser = await User.findById(req.user.id);
-    let messages = await Message.find({
+
+    const messages = await Message.find({
       $and: [
         {
           $or: [
             {
-              $and: [
-                { message_to: String(connectedUser._id) },
-                { messsage_from: String(otherUser._id) },
-              ],
+              message_from: connectedUser._id,
+              message_to: otherUser._id,
             },
             {
-              $and: [
-                { message_from: String(connectedUser._id) },
-                { messsage_to: String(otherUser._id) },
-              ],
+              message_to: connectedUser._id,
+              message_from: otherUser._id,
             },
           ],
         },
@@ -78,6 +76,7 @@ export const getMessages = asyncHandler(async (req, res) => {
         },
       ],
     }).select("-delete_users");
+
     res.json(messages);
   } else {
     res.status(404);
@@ -101,56 +100,98 @@ export const getLastMessages = asyncHandler(async (req, res) => {
     .sort({ message_date: "descending" });
 
   const message_to_send = [];
-  messages.forEach((message) => {
+
+  for (let i = 0; i < messages.length; i++) {
     if (
-      message.delete_users.findIndex(
+      messages[i].delete_users.findIndex(
         (u) => String(u.user) === String(connectedUser._id)
       ) === -1
     ) {
       const index = message_to_send.findIndex(
         (m) =>
-          String(m.user._id) === String(message.message_to._id) ||
-          String(m.user._id) === String(message.message_from._id)
+          String(m.user._id) === String(messages[i].message_to._id) ||
+          String(m.user._id) === String(messages[i].message_from._id)
       );
+
       if (index === -1) {
-        if (String(message.message_from._id) !== String(connectedUser._id)) {
+        if (
+          String(messages[i].message_from._id) !== String(connectedUser._id)
+        ) {
+          const nbr = await Message.find({
+            $and: [
+              {
+                message_from: messages[i].message_from._id,
+                message_to: connectedUser._id,
+              },
+              {
+                isSeen: false,
+              },
+            ],
+          }).count();
+
           message_to_send.push({
             user: {
-              _id: message.message_from._id,
-              name: message.message_from.name,
-              avatar: message.message_from.avatar,
+              _id: messages[i].message_from._id,
+              name: messages[i].message_from.name,
+              avatar: messages[i].message_from.avatar,
             },
-            last_message: {
-              _id: message._id,
-              message_text: message.message_text,
-              message_post: message.message_post,
-              message_date: message.message_date,
-              isSeen: message.isSeen,
-              isSending: true,
+            message: {
+              _id: messages[i]._id,
+              message_text: messages[i].message_text,
+              message_post: messages[i].message_post,
+              message_date: messages[i].message_date,
+              isSeen: messages[i].isSeen,
+              nbr: nbr,
+              isConnectedUserSeend: false,
             },
           });
         } else {
+          const nbr = await Message.find({
+            $and: [
+              {
+                message_from: messages[i].message_to._id,
+                message_to: connectedUser._id,
+              },
+              {
+                isSeen: false,
+              },
+            ],
+          }).count();
+
           message_to_send.push({
             user: {
-              _id: message.message_to._id,
-              name: message.message_to.name,
-              avatar: message.message_to.avatar,
+              _id: messages[i].message_to._id,
+              name: messages[i].message_to.name,
+              avatar: messages[i].message_to.avatar,
             },
-            last_message: {
-              _id: message._id,
-              message_text: message.message_text,
-              message_post: message.message_post,
-              message_date: message.message_date,
-              isSeen: message.isSeen,
-              isSending: true,
+            message: {
+              _id: messages[i]._id,
+              message_text: messages[i].message_text,
+              message_post: messages[i].message_post,
+              message_date: messages[i].message_date,
+              isSeen: messages[i].isSeen,
+              nbr: nbr,
+              isConnectedUserSeend: true,
             },
           });
         }
+      } else {
       }
     }
-  });
+  }
 
   res.json(message_to_send);
+});
+
+// @desc    Get count of messages not seen
+// @route   GET /api/messages/notseen/count
+// @access  Private
+export const getNotSeenCountMessages = asyncHandler(async (req, res) => {
+  const nbr = await Message.find({
+    $and: [{ message_to: req.user.id }, { isSeen: false }],
+  }).count();
+
+  res.json(nbr);
 });
 
 // @desc    Seen all messages in convertation
@@ -161,7 +202,7 @@ export const seenAllMessages = asyncHandler(async (req, res) => {
   const otherUser = await User.findById(req.params.id);
   if (otherUser) {
     const connectedUser = await User.findById(req.user.id);
-    await Message.updateMany(
+    await Messages[i].updateMany(
       {
         $and: [
           { isSeen: false },

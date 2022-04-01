@@ -73,6 +73,7 @@ textarea {
   z-index: 10000;
   background-color: #fff;
   width: 350px;
+  min-height: 250px;
   max-height: 400px;
   overflow-y: auto;
   border: 1px solid #f7f7f7;
@@ -228,9 +229,40 @@ textarea {
   padding: 10px;
   margin-bottom: 5px;
   display: block;
+  position: relative;
 }
+
 .conv-body .message-container .message p {
   font-size: 12px;
+}
+
+.conv-body .message-container .message .message-inf {
+  font-size: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.conv-body .message-container .message .message-btn-remove {
+  position: absolute;
+  right: 0%;
+  background: none;
+  border: none;
+  display: none;
+  font-size: 11px;
+  top: 4%;
+  right: 2%;
+}
+.conv-body .message-container .message:hover .message-btn-remove {
+  display: block;
+}
+
+.conv-body
+  .message-container.connected-user-message
+  .message
+  .message-btn-remove {
+  color: #fff;
+}
+.conv-body .message-container.other-user-message .message .message-btn-remove {
+  color: #000;
 }
 
 .conv-body .message-container.connected-user-message .message {
@@ -246,6 +278,7 @@ textarea {
   color: #000;
   border-radius: 10px 0px 10px 10px;
 }
+
 .conv-footer {
   background-color: #fff !important;
 }
@@ -296,19 +329,43 @@ textarea {
 .convertation-item {
   cursor: pointer;
   font-size: 13px;
-  padding: 15px;
+  padding: 25px;
+  width: 100%;
 }
 .convertation-item .me {
   font-weight: bold;
+  font-size: 14px;
+}
+.convertation-item > div {
+  display: flex;
+  align-items: center;
+}
+.convertation-item .avatar-container {
+  width: 50px;
+  height: 50px;
+  margin-right: 30px;
+}
+
+.convertation-item .convertation-item-inf {
+  width: 300px;
+}
+.convertation-item .convertation-item-inf p {
+  font-size: 13px;
+  line-height: 1rem;
+}
+.convertation-item .convertation-item-inf .not-seen-message {
+  font-weight: bold;
+  font-size: 14px;
+}
+.convertation-item div > div:last-child {
+  width: 90px;
+}
+.convertation-item div > div:last-child .badge {
+  width: 20px;
 }
 .convertation-item.m-active,
 .convertation-item:hover {
   background-color: #f7f7f7 !important;
 }
 
-.convertation-item .avatar-container {
-  margin-right: 20px;
-  width: 65px;
-  height: 65px;
-}
 /*End Convertations */

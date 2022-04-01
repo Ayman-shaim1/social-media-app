@@ -40,6 +40,14 @@ import {
   notificationSendReducer,
 } from "./notification/notificationReducers";
 
+import {
+  messageGetNotSeenReducer,
+  messageGetConvertationsReducer,
+  messageListReducer,
+} from "./message/messageReducers";
+
+import convertationReducer from "./convertation/convertationReducer";
+
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
@@ -66,7 +74,7 @@ const reducer = combineReducers({
   userChangePassword: userChangePasswordReducer,
   userChangeAvatar: userChangeAvatarReducer,
   userCheckFollow: userCheckFollowReducer,
-  
+
   postList: postListReducer,
   postCreate: postCreateReducer,
   postAddComment: postAddCommentReducer,
@@ -80,6 +88,13 @@ const reducer = combineReducers({
   notificationList: notificationListReducer,
   notificationSeen: notificationSeenReducer,
   notificationSend: notificationSendReducer,
+
+  
+  messageGetNotSeen: messageGetNotSeenReducer,
+  messageGetConvertations: messageGetConvertationsReducer,
+  messageList: messageListReducer,
+  
+  convertation: convertationReducer,
 });
 
 const store = createStore(

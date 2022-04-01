@@ -75,16 +75,13 @@ const FindFriendsPage = ({ findUsers, userFind }) => {
         {users && users.length > 0
           ? users.map((user) => <UserItem user={user} key={user._id} />)
           : users && (
-              <Alert variant="danger">
-                <div className="d-flex justify-content-center">
-                  <h1>
-                    <i className="fa-solid fa-user-xmark"></i>
-                  </h1>
+              <div className="p-3 mt-3">
+                <div className="p-3 ">
+                  <div className="d-flex justify-content-center mt-5">
+                    <small className="text-secondary">users not found</small>
+                  </div>
                 </div>
-                <div className="d-flex justify-content-center">
-                  <h4>users not found !</h4>
-                </div>
-              </Alert>
+              </div>
             )}
       </Col>
       <Col xl={3} lg={3} md={2} sm={12}></Col>

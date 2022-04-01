@@ -6,6 +6,7 @@ import {
   getMessages,
   sendMessage,
   seenAllMessages,
+  getNotSeenCountMessages,
 } from "../controllers/messageController.js";
 const router = express.Router();
 
@@ -15,6 +16,8 @@ router
   .post(protect, sendMessage)
   .put(protect, deleteMessage)
   .get(protect, getMessages);
+
 router.route("/seen/:id").put(protect, seenAllMessages);
+router.route("/notseen/count").get(protect, getNotSeenCountMessages);
 
 export default router;

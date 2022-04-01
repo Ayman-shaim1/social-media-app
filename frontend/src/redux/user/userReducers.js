@@ -93,7 +93,7 @@ export const userByIdReducer = (state = {}, action) => {
     case USER_GET_BY_ID_REQUEST:
       return { loading: true };
     case USER_GET_BY_ID_SUCCESS:
-      return { loading: false, user: payload };
+      return { loading: false, user: payload, success: true };
     case USER_GET_BY_ID_FAIL:
       return { error: payload, loading: false };
     case USER_GET_BY_ID_RESET:

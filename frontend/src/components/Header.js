@@ -19,20 +19,26 @@ import { NOTIFICATION_GET_LIST_SEEN_UPDATE } from "../redux/notification/notific
 import { Link } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import useAlert from "../hooks/useAlert";
-
 import NotificationsDropDown from "./NotificationsDropDown";
 import UsersDropdown from "./UsersDropdown";
+import {
+  getNotSeenMessagesCount,
+  resetGetNotSeenCountMessages,
+} from "../redux/message/messageActions";
 
 const Header = ({
   logout,
   userLogin,
   notificationList,
+  messageGetNotSeen,
   getListNotifications,
   resetGetListNotification,
   seenAllNotifications,
   userFind,
   findUsers,
   resetFindUser,
+  resetGetNotSeenCountMessages,
+  getNotSeenMessagesCount,
 }) => {
   // hooks :
   const showAlert = useAlert();
@@ -49,6 +55,7 @@ const Header = ({
   const { userInfo } = userLogin;
   const { error: notificationListError, notifications } = notificationList;
   const { error: userFindError } = userFind;
+  const { error: messageGetNotSeenError, nbr } = messageGetNotSeen;
 
   const showNotificationsHandler = (e) => {
     e.preventDefault();
@@ -100,6 +107,7 @@ const Header = ({
     if (!isCallApi) {
       setIsCallApi(true);
       getListNotifications();
+      getNotSeenMessagesCount();
     }
 
     if (showNotifications) {
@@ -114,8 +122,19 @@ const Header = ({
       });
       resetFindUser();
     }
+
+    if (messageGetNotSeenError) {
+      showAlert({
+        type: "danger",
+        title: "error",
+        content: messageGetNotSeenError,
+      });
+      resetGetNotSeenCountMessages();
+    }
   }, [
+    resetGetNotSeenCountMessages,
     resetFindUser,
+    getNotSeenMessagesCount,
     showNotifications,
     userFindError,
     seenAllNotifications,
@@ -124,6 +143,7 @@ const Header = ({
     resetGetListNotification,
     showAlert,
     getListNotifications,
+    messageGetNotSeenError,
   ]);
 
   return (
@@ -190,7 +210,7 @@ const Header = ({
               onClick={hideNotificationAndSearchUsersHandler}>
               <Nav.Link>
                 <i className="mr-1 fa-solid fa-envelope"></i>Messages
-                <Badge>0</Badge>
+                {nbr && nbr > 0 && <Badge>{nbr}</Badge>}
               </Nav.Link>
             </LinkContainer>
 
@@ -233,8 +253,8 @@ const Header = ({
   );
 };
 const mapStateToProps = (state) => {
-  const { userLogin, notificationList, userFind } = state;
-  return { userLogin, notificationList, userFind };
+  const { userLogin, notificationList, userFind, messageGetNotSeen } = state;
+  return { userLogin, notificationList, userFind, messageGetNotSeen };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -243,6 +263,9 @@ const mapDispatchToProps = (dispatch) => {
     getListNotifications: () => dispatch(getListNotifications()),
     findUsers: (arg) => dispatch(findUsers(arg)),
     seenAllNotifications: () => dispatch(seenAllNotifications()),
+    getNotSeenMessagesCount: () => dispatch(getNotSeenMessagesCount()),
+    resetGetNotSeenCountMessages: () =>
+      dispatch(resetGetNotSeenCountMessages()),
     resetFindUser: () => dispatch(resetFindUser()),
     resetGetListNotification: () => dispatch(resetGetListNotification()),
   };

@@ -1,5 +1,5 @@
 import React from "react";
-import {  Alert, ListGroup } from "react-bootstrap";
+import { Alert, ListGroup } from "react-bootstrap";
 import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -31,16 +31,11 @@ const UsersDropdown = ({ show, userFind, hide }) => {
         ))
       ) : (
         <div className="p-3 mt-4">
-          <Alert variant="danger">
-            <div className="d-flex justify-content-center">
-              <h1>
-                <i className="fa-solid fa-user-xmark"></i>
-              </h1>
+          <div className="p-3 mt-5">
+            <div className="d-flex justify-content-center mt-5">
+              <small className="text-secondary">users not found</small>
             </div>
-            <div className="d-flex justify-content-center">
-              <h6>users not found</h6>
-            </div>
-          </Alert>
+          </div>
         </div>
       )}
     </ListGroup>

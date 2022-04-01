@@ -61,7 +61,7 @@ const ProfilePage = ({
 
   const {
     loading: getByIdUserLoading,
-    error: getByIdUserError,
+
     user,
   } = userById;
 
@@ -244,15 +244,6 @@ const ProfilePage = ({
       }
     }
 
-    if (getByIdUserError) {
-      showAlert({
-        type: "danger",
-        title: "error",
-        content: getByIdUserError,
-      });
-      resetGetByIdUser();
-    }
-
     if (userFollowError) {
       setLoading(false);
       showAlert({
@@ -309,7 +300,7 @@ const ProfilePage = ({
     isRequestChecked,
     userFollowError,
     userUnFollowError,
-    getByIdUserError,
+
     userFollowSuccess,
     userUnFollowSuccess,
     resetFollowUser,
@@ -323,83 +314,89 @@ const ProfilePage = ({
         <Col xl={6} lg={6} md={10} sm={12}>
           {getByIdUserLoading ? (
             <Loader />
-          ) : (
-            user && (
-              <>
-                <ProfileUserFollowRequest user={user} />
-                <Alert variant="info">
-                  {String(userInfo._id) === String(user._id) && (
-                    <div className="d-flex justify-content-end position-relative">
-                      <Link to="/settings" className="position-absolute">
-                        <i className="fas fa-gear text-secondary "></i>
-                      </Link>
-                    </div>
-                  )}
-                  <div className="d-flex justify-content-center">
-                    <Avatar image={user.avatar} size="xl" />
+          ) : user ? (
+            <>
+              <ProfileUserFollowRequest user={user} />
+              <Alert variant="info">
+                {String(userInfo._id) === String(user._id) && (
+                  <div className="d-flex justify-content-end position-relative">
+                    <Link to="/settings" className="position-absolute">
+                      <i className="fas fa-gear text-secondary "></i>
+                    </Link>
                   </div>
-                  <div className="d-flex justify-content-center mt-2">
-                    <h3>{user.name}</h3>
-                  </div>
-                  <div className="d-flex justify-content-center">
-                    <h5
-                      onClick={() => {
-                        if (isAccessible) setShowFollowers(true);
-                      }}
-                      className="m-2 cursor-pointer">
-                      {nbrFollowers} Followers
-                    </h5>
-                    <h5
-                      onClick={() => {
-                        if (isAccessible) setShowFollowing(true);
-                      }}
-                      className="m-2 cursor-pointer">
-                      {nbrFollowing} Following
-                    </h5>
-                    <FollowersUsersModal
-                      showUsers={showFollowers}
-                      hideUsers={() => setShowFollowers(false)}
-                      users={user.followers.filter((u) => u.isAccepted)}
-                      isUserProfile={
-                        user &&
-                        userInfo &&
-                        String(user._id) === String(userInfo._id)
-                      }
-                    />
-                    <FollowingUsersModal
-                      showUsers={showFollowing}
-                      hideUsers={() => setShowFollowing(false)}
-                      users={user.following.filter((u) => u.isAccepted)}
-                    />
-                  </div>
-                  {String(userInfo._id) !== String(user._id) && (
-                    <>
-                      <hr />
-                      <div className="d-flex justify-content-center">
-                        {btns.find((btn) => btn.state === requestState).button}
-                      </div>
-                    </>
-                  )}
-                </Alert>
-                {isAccessible || String(userInfo._id) === String(user._id) ? (
-                  user.posts.map((post) => <Post post={post} key={post._id} />)
-                ) : (
-                  <Alert variant="danger">
-                    <div className="d-flex justify-content-center">
-                      <h1>
-                        <i className="fa-solid fa-lock"></i>
-                      </h1>
-                    </div>
-                    <div className="d-flex justify-content-center">
-                      <h5>This user account is private</h5>
-                    </div>
-                    <div className="d-flex justify-content-center">
-                      <h6>try to follow him</h6>
-                    </div>
-                  </Alert>
                 )}
-              </>
-            )
+                <div className="d-flex justify-content-center">
+                  <Avatar image={user.avatar} size="xl" />
+                </div>
+                <div className="d-flex justify-content-center mt-2">
+                  <h3>{user.name}</h3>
+                </div>
+                <div className="d-flex justify-content-center">
+                  <h5
+                    onClick={() => {
+                      if (isAccessible) setShowFollowers(true);
+                    }}
+                    className="m-2 cursor-pointer">
+                    {nbrFollowers} Followers
+                  </h5>
+                  <h5
+                    onClick={() => {
+                      if (isAccessible) setShowFollowing(true);
+                    }}
+                    className="m-2 cursor-pointer">
+                    {nbrFollowing} Following
+                  </h5>
+                  <FollowersUsersModal
+                    showUsers={showFollowers}
+                    hideUsers={() => setShowFollowers(false)}
+                    users={user.followers.filter((u) => u.isAccepted)}
+                    isUserProfile={
+                      user &&
+                      userInfo &&
+                      String(user._id) === String(userInfo._id)
+                    }
+                  />
+                  <FollowingUsersModal
+                    showUsers={showFollowing}
+                    hideUsers={() => setShowFollowing(false)}
+                    users={user.following.filter((u) => u.isAccepted)}
+                  />
+                </div>
+                {String(userInfo._id) !== String(user._id) && (
+                  <>
+                    <hr />
+                    <div className="d-flex justify-content-center">
+                      {btns.find((btn) => btn.state === requestState).button}
+                    </div>
+                  </>
+                )}
+              </Alert>
+              {isAccessible || String(userInfo._id) === String(user._id) ? (
+                user.posts.map((post) => <Post post={post} key={post._id} />)
+              ) : (
+                <Alert variant="danger">
+                  <div className="d-flex justify-content-center">
+                    <h1>
+                      <i className="fa-solid fa-lock"></i>
+                    </h1>
+                  </div>
+                  <div className="d-flex justify-content-center">
+                    <h5>This user account is private</h5>
+                  </div>
+                  <div className="d-flex justify-content-center">
+                    <h6>try to follow him</h6>
+                  </div>
+                </Alert>
+              )}
+            </>
+          ) : (
+            <Alert variant="danger" className="p-5">
+              <div className="p-5 mt-4">
+                <div className="d-flex justify-content-center p-5">
+                  <small className="text-secondary">user not found</small>
+                </div>
+              </div>
+            </Alert>
           )}
         </Col>
         <Col xl={3} lg={3} md={2} sm={12}></Col>
