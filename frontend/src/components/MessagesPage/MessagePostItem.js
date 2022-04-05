@@ -9,6 +9,7 @@ import {
   resetDeleteMessage,
 } from "../../redux/message/messageActions";
 import useAlert from "../../hooks/useAlert";
+import Video from "../Video";
 
 const MessagePostItem = ({
   message,
@@ -80,7 +81,7 @@ const MessagePostItem = ({
             {message.message_post.text && <p>{message.message_post.text}</p>}
             {message.message_post.media_url &&
             String(message.message_post.media_url).includes(".mp4") ? (
-              <video src={message.message_post.media_url} controls></video>
+              <Video src={message.message_post.media_url} />
             ) : (
               <Link to={`/post/${message.message_post._id}`}>
                 <Image

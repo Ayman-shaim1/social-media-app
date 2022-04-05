@@ -4,6 +4,7 @@ import { createPost, resetCreatePost } from "../../redux/post/postActions";
 import { connect } from "react-redux";
 import useAlert from "../../hooks/useAlert";
 import Loader from "../Loader";
+import Video from "../Video";
 
 const AddMediaPost = ({
   show,
@@ -119,9 +120,7 @@ const AddMediaPost = ({
               {mediaType === "image" && (
                 <img src={mediaUrl} alt="choosen-media" />
               )}
-              {mediaType === "video" && (
-                <video src={mediaUrl} controls alt="choosen-media"></video>
-              )}
+              {mediaType === "video" && <Video src={mediaUrl} />}
             </div>
             <div className="d-grid gap-2 mt-2">
               <Button type="submit" size="sm">

@@ -19,7 +19,7 @@ import { Link, useNavigate } from "react-router-dom";
 import CommentItem from "../components/PostPage/CommentItem";
 import AddComment from "../components/PostPage/AddComment";
 import useDialog from "../hooks/useDialog";
-
+import Video from "../components/Video";
 const PostPage = ({
   getByIdPost,
   postById,
@@ -223,7 +223,7 @@ const PostPage = ({
                     {post.text && <p>{post.text}</p>}
                     {post.media_url &&
                     String(post.media_url).includes(".mp4") ? (
-                      <video src={post.media_url} controls></video>
+                      <Video src={post.media_url} />
                     ) : (
                       <Link to={`/post/${post._id}`}>
                         <Image
