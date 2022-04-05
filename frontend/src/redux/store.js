@@ -20,6 +20,7 @@ import {
   userChangeAvatarReducer,
   userChangePasswordReducer,
   userCheckFollowReducer,
+  userGetFollowersReducer,
 } from "./user/userReducers";
 
 import {
@@ -44,6 +45,10 @@ import {
   messageGetNotSeenReducer,
   messageGetConvertationsReducer,
   messageListReducer,
+  messageSendReducer,
+  messageRemoveConvertationReducer,
+  messageDeleteReducer,
+  messageSeenAllReducer,
 } from "./message/messageReducers";
 
 import convertationReducer from "./convertation/convertationReducer";
@@ -74,6 +79,7 @@ const reducer = combineReducers({
   userChangePassword: userChangePasswordReducer,
   userChangeAvatar: userChangeAvatarReducer,
   userCheckFollow: userCheckFollowReducer,
+  userGetFollowers:userGetFollowersReducer,
 
   postList: postListReducer,
   postCreate: postCreateReducer,
@@ -89,11 +95,14 @@ const reducer = combineReducers({
   notificationSeen: notificationSeenReducer,
   notificationSend: notificationSendReducer,
 
-  
   messageGetNotSeen: messageGetNotSeenReducer,
   messageGetConvertations: messageGetConvertationsReducer,
   messageList: messageListReducer,
-  
+  messageSend: messageSendReducer,
+  messageRemoveConvertation: messageRemoveConvertationReducer,
+  messageDelete: messageDeleteReducer,
+  messageSeenAll: messageSeenAllReducer,
+
   convertation: convertationReducer,
 });
 

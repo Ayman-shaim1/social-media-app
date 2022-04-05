@@ -1,27 +1,79 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import {
+  deleteMessage,
+  resetDeleteMessage,
+} from "../../redux/message/messageActions";
+import useAlert from "../../hooks/useAlert";
 
-const MessageItem = ({ message }) => {
+const MessageItem = ({
+  message,
+  userLogin,
+  messageDelete,
+
+  deleteMessage,
+  resetDeleteMessage,
+}) => {
+  // hooks :
+  const showAlert = useAlert();
+
+  // redux states :
+  const { userInfo } = userLogin;
+  const { loading, error, success } = messageDelete;
+
+  useEffect(() => {
+    if (error) {
+      showAlert({
+        type: "danger",
+        title: "error",
+        content: error,
+      });
+      resetDeleteMessage();
+    }
+    if (success) {
+      resetDeleteMessage();
+    }
+  }, [error, success, showAlert, resetDeleteMessage]);
+
   return (
-    <div className={`message-container other-user-message`}>
+    <div
+      className={`message-container ${
+        String(userInfo._id) === String(message.message_from)
+          ? "connected"
+          : "other"
+      }-user-message ${loading ? " message-loading" : ""}`}>
       <div className={`message`}>
-        <button className="message-btn-remove">
+        <button
+          className="message-btn-remove"
+          disabled={loading}
+          onClick={() => deleteMessage(message._id)}>
           <i className="fas fa-times"></i>
         </button>
         <div className="message-content">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate
-            doloribus voluptas, corrupti accusamus voluptate earum reiciendis
-            adipisci eius labore ullam nihil, provident quos nisi? Dolor
-            recusandae dolore harum autem dolores.
-          </p>
+          <p>{message.message_text}</p>
         </div>
         <div className="message-inf">
-          <small>{new Date().toDateString()}</small>
-          <small>seen</small>
+          <small>{new Date(message.message_date).toDateString()}</small>
+          {String(userInfo._id) === String(message.message_from) &&
+            message.isSeen && <small>seen</small>}
         </div>
       </div>
     </div>
   );
 };
 
-export default MessageItem;
+const mapStateToProps = (state) => {
+  return {
+    userLogin: state.userLogin,
+    messageDelete: state.messageDelete,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteMessage: (id) => dispatch(deleteMessage(id)),
+    resetDeleteMessage: () => dispatch(resetDeleteMessage()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageItem);

@@ -441,7 +441,9 @@ export const getFollowersRequestsUsers = asyncHandler(async (req, res) => {
 // @route   GET /api/users/followers/:id
 // @access  Private
 export const getFollowersUsers = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id).populate("followers.user").select(
+    "-password -notifications"
+  );
   if (user) {
     res.json(user.followers.filter((u) => u.isAccepted));
   } else {

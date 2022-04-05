@@ -203,87 +203,6 @@ textarea {
 }
 /* End User search DropDown */
 
-/* begin Convertation */
-.conv {
-  height: 80vh;
-}
-.conv-header .avatar-container {
-  margin-right: 20px;
-}
-.conv-header #drp-conv-header-btn {
-  background-color: #f7f7f7 !important;
-  color: #000;
-}
-
-.conv-body {
-  overflow-y: auto;
-}
-.conv-body .message-container {
-  width: 100%;
-  margin-bottom: 5px;
-  display: flex;
-}
-
-.conv-body .message-container .message {
-  width: 50%;
-  padding: 10px;
-  margin-bottom: 5px;
-  display: block;
-  position: relative;
-}
-
-.conv-body .message-container .message p {
-  font-size: 12px;
-}
-
-.conv-body .message-container .message .message-inf {
-  font-size: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-.conv-body .message-container .message .message-btn-remove {
-  position: absolute;
-  right: 0%;
-  background: none;
-  border: none;
-  display: none;
-  font-size: 11px;
-  top: 4%;
-  right: 2%;
-}
-.conv-body .message-container .message:hover .message-btn-remove {
-  display: block;
-}
-
-.conv-body
-  .message-container.connected-user-message
-  .message
-  .message-btn-remove {
-  color: #fff;
-}
-.conv-body .message-container.other-user-message .message .message-btn-remove {
-  color: #000;
-}
-
-.conv-body .message-container.connected-user-message .message {
-  background-color: #000;
-  color: #fff;
-  border-radius: 0px 10px 10px 10px;
-}
-.conv-body .message-container.other-user-message {
-  flex-direction: row-reverse;
-}
-.conv-body .message-container.other-user-message .message {
-  background-color: #f7f7f7;
-  color: #000;
-  border-radius: 10px 0px 10px 10px;
-}
-
-.conv-footer {
-  background-color: #fff !important;
-}
-/* End Convertation */
-
 /* Begin Convertations */
 .convertations-container {
   height: 80vh;
@@ -332,6 +251,13 @@ textarea {
   padding: 25px;
   width: 100%;
 }
+.convertation-item.convertation-item-loading {
+  opacity: 0.8;
+}
+
+.convertation-item.convertation-item-loading:hover {
+  background-color: #fff !important;
+}
 .convertation-item .me {
   font-weight: bold;
   font-size: 14px;
@@ -357,15 +283,157 @@ textarea {
   font-weight: bold;
   font-size: 14px;
 }
-.convertation-item div > div:last-child {
+.convertation-item div .convertation-item-inf-lss {
   width: 90px;
 }
-.convertation-item div > div:last-child .badge {
+.convertation-item div .convertation-item-inf-lss .badge {
   width: 20px;
+}
+.convertation-item div .dropdown {
+  visibility: hidden;
+}
+.convertation-item div .dropdown .btn {
+  background: transparent !important;
+  color: #000;
 }
 .convertation-item.m-active,
 .convertation-item:hover {
   background-color: #f7f7f7 !important;
 }
-
+.convertation-item:hover .dropdown {
+  visibility: visible;
+}
 /*End Convertations */
+
+/* begin Convertation */
+.conv {
+  height: 80vh;
+}
+.conv-header .avatar-container {
+  margin-right: 20px;
+}
+.conv-header #drp-conv-header-btn {
+  background-color: #f7f7f7 !important;
+  color: #000;
+}
+
+.conv-body {
+  overflow-y: auto;
+}
+.conv-body .message-container {
+  width: 100%;
+  margin-bottom: 5px;
+  display: flex;
+}
+
+.conv-body .message-container .message {
+  width: 50%;
+  padding: 10px;
+  margin-bottom: 5px;
+  display: block;
+  position: relative;
+}
+.conv-body .message-container.message-loading {
+  opacity: 0.7;
+}
+.conv-body .message-container .message p {
+  font-size: 12px;
+}
+
+.conv-body .message-container .message .message-inf {
+  font-size: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.conv-body .message-container .message .message-btn-remove {
+  position: absolute;
+  background: none;
+  border: none;
+  display: none;
+  font-size: 11px;
+  top: 5%;
+  right: 2%;
+}
+.conv-body .message-container .message:hover .message-btn-remove {
+  display: block;
+}
+
+.conv-body
+  .message-container.connected-user-message
+  .message
+  .message-btn-remove {
+  color: #fff;
+}
+.conv-body .message-container.other-user-message .message .message-btn-remove {
+  color: #000;
+}
+
+.conv-body .message-container.connected-user-message .message {
+  background-color: #000;
+  color: #fff;
+  border-radius: 0px 10px 10px 10px;
+}
+.conv-body .message-container .message .message-content {
+  margin-right: 5px;
+}
+
+.conv-body .message-container.other-user-message {
+  flex-direction: row-reverse;
+}
+.conv-body .message-container.other-user-message .message {
+  background-color: #f7f7f7;
+  color: #000;
+  border-radius: 10px 0px 10px 10px;
+}
+
+.conv-body .message-container.message-post .message {
+  padding: 0;
+  background-color: white !important;
+  color: #000;
+  width: 60%;
+}
+.conv-body .message-container.message-post .message .message-inf {
+  margin: 15px 0;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 15px;
+}
+.conv-footer {
+  background-color: #fff !important;
+}
+/* End Convertation */
+
+/* Begin post Video */
+.post-video-container {
+  position: relative;
+}
+.post-video-container .post-video {
+  border-radius: 3px;
+}
+.post-video-container .post-video-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  color: #f4f4f4;
+  border: none;
+  font-size: 50px;
+}
+.post-video-container .controls {
+  position: absolute;
+  bottom: 5%;
+  width: 100%;
+  padding: 10px 30px;
+}
+.post-video-container .controls .ifc-controls {
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  margin-bottom: 5px;
+}
+.post-video-container .controls .ifc-controls .volume-btn {
+  cursor: pointer;
+}
+
+
+/* End post Video */

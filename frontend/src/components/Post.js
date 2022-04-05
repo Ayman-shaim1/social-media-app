@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import useDialog from "../hooks/useDialog";
 import useAlert from "../hooks/useAlert";
+import Video from "./Video";
 
 const Post = ({
   post,
@@ -151,7 +152,7 @@ const Post = ({
       <Card.Body>
         {post.text && <p>{post.text}</p>}
         {post.media_url && String(post.media_url).includes(".mp4") ? (
-          <video src={post.media_url} controls></video>
+          <Video src={post.media_url} />
         ) : (
           <Link to={`/post/${post._id}`}>
             <Image src={post.media_url} className="media-post" rounded />

@@ -17,7 +17,7 @@ const messageSchema = Schema({
   },
   message_post: {
     type: Schema.Types.ObjectId,
-    ref: "posts",
+    ref: "post",
   },
   message_date: {
     type: Date,

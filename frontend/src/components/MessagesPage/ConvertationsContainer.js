@@ -13,6 +13,7 @@ const ConvertationsContainer = ({
   messageGetConvertations,
   getConvertations,
   resetGetConvertations,
+  show,
 }) => {
   // hooks :
   const showAlert = useAlert();
@@ -38,14 +39,20 @@ const ConvertationsContainer = ({
   }, [error, isCallApi, showAlert, getConvertations, resetGetConvertations]);
 
   return (
-    <>
+    <div className={show ? "d-block" : "d-none"}>
       <div className="mb-2">
         <Form>
           <Form.Control size="sm" placeholder="search convertation ..." />
         </Form>
       </div>
       {loading ? (
-        <Loader />
+        <div className="mt-5 pt-2">
+          <div className="mt-5 pt-3">
+            <div className="mt-5">
+              <Loader size="md" />
+            </div>
+          </div>
+        </div>
       ) : (
         convertations.length > 0 && (
           <ListGroup>
@@ -58,7 +65,7 @@ const ConvertationsContainer = ({
           </ListGroup>
         )
       )}
-    </>
+    </div>
   );
 };
 

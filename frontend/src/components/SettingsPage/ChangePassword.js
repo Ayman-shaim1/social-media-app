@@ -60,7 +60,7 @@ const ChangePassword = ({
       showAlert({
         title: "alert",
         type: "success",
-        content: "your password have been changed with seccuessfuly",
+        content: "your password have been changed with successfully",
       });
       resetChangePasswordUser();
       setConfirmNewPassword("");

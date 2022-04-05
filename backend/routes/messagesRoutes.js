@@ -7,6 +7,7 @@ import {
   sendMessage,
   seenAllMessages,
   getNotSeenCountMessages,
+  deleteConvertationMessage,
 } from "../controllers/messageController.js";
 const router = express.Router();
 
@@ -19,5 +20,6 @@ router
 
 router.route("/seen/:id").put(protect, seenAllMessages);
 router.route("/notseen/count").get(protect, getNotSeenCountMessages);
+router.route("/convertation/:id").put(protect, deleteConvertationMessage);
 
 export default router;

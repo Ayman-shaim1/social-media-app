@@ -8,7 +8,7 @@ const convertationReducer = (state = { isOpen: false }, action) => {
     case CONVERTATION_CLOSE:
       return { isOpen: false };
     default:
-      return { isOpen: false };
+      return state;
   }
 };
 

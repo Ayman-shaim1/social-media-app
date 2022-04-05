@@ -55,6 +55,10 @@ import {
   USER_CHECK_FOLLOW_REQUEST,
   USER_CHECK_FOLLOW_RESET,
   USER_CHECK_FOLLOW_SUCCESS,
+  USER_GET_FOLLOWERS_REQUEST,
+  USER_GET_FOLLOWERS_FAIL,
+  USER_GET_FOLLOWERS_RESET,
+  USER_GET_FOLLOWERS_SUCCESS,
 } from "./userTypes";
 import { POST_LIST_RESET } from "../post/postTypes";
 
@@ -569,4 +573,41 @@ export const changeAvatarUser = (avatarFile) => {
 
 export const resetChangeAvatarUser = () => {
   return { type: USER_CHANGE_AVATAR_RESET };
+};
+
+export const getFollowers = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: USER_GET_FOLLOWERS_REQUEST });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${userInfo.token} `,
+        },
+      };
+
+      const { data } = await axios.get(
+        `/api/users/followers/${userInfo._id}`,
+        config
+      );
+
+
+
+      dispatch({ type: USER_GET_FOLLOWERS_SUCCESS, payload: data });
+    } catch (error) {
+      const err =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({ type: USER_GET_FOLLOWERS_FAIL, payload: err });
+    }
+  };
+};
+
+export const resetGetFollowers = () => {
+  return { type: USER_GET_FOLLOWERS_RESET };
 };

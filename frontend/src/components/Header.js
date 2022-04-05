@@ -209,8 +209,8 @@ const Header = ({
               to="/messages"
               onClick={hideNotificationAndSearchUsersHandler}>
               <Nav.Link>
-                <i className="mr-1 fa-solid fa-envelope"></i>Messages
-                {nbr && nbr > 0 && <Badge>{nbr}</Badge>}
+                <i className="mr-1 fa-solid fa-envelope"></i> Messages
+                {nbr && nbr >= 0 ? <Badge>{nbr}</Badge> : <></>}
               </Nav.Link>
             </LinkContainer>
 

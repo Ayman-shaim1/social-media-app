@@ -66,7 +66,7 @@ const ChangeAvatar = ({
       showAlert({
         title: "alert",
         type: "success",
-        content: "your avatar have been changed with seccuessfuly",
+        content: "your avatar have been changed with successfully",
       });
       resetChangeAvatarUser();
       setAvatar(null);

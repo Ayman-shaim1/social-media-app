@@ -56,6 +56,10 @@ import {
   USER_CHECK_FOLLOW_RESET,
   USER_CHECK_FOLLOW_SUCCESS,
   USER_CHECK_FOLLOW_UPDATE_REMOVE,
+  USER_GET_FOLLOWERS_REQUEST,
+  USER_GET_FOLLOWERS_FAIL,
+  USER_GET_FOLLOWERS_RESET,
+  USER_GET_FOLLOWERS_SUCCESS,
 } from "./userTypes";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -310,6 +314,22 @@ export const userChangeAvatarReducer = (state = {}, action) => {
       return { loading: false, error: payload };
     case USER_CHANGE_AVATAR_RESET:
       return {};
+    default:
+      return state;
+  }
+};
+
+export const userGetFollowersReducer = (state = { users: [] }, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case USER_GET_FOLLOWERS_REQUEST:
+      return { loading: true, users: [] };
+    case USER_GET_FOLLOWERS_SUCCESS:
+      return { loading: false, success: true, users: payload };
+    case USER_GET_FOLLOWERS_FAIL:
+      return { loading: false, error: payload, users: [] };
+    case USER_GET_FOLLOWERS_RESET:
+      return { users: [] };
     default:
       return state;
   }

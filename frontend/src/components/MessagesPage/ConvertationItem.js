@@ -1,13 +1,42 @@
-import React from "react";
-import { ListGroup, Badge } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { ListGroup, Badge, Dropdown } from "react-bootstrap";
 import Avatar from "../Avatar";
 import { openConvertation } from "../../redux/convertation/convertationActions";
+import {
+  getMessages,
+  resetGetMessages,
+  removeConvertation,
+  resetRemoveConvertation,
+} from "../../redux/message/messageActions";
 import { connect } from "react-redux";
+import useDialog from "../../hooks/useDialog";
+import useAlert from "../../hooks/useAlert";
 
-const ConvertationItem = ({ convertation, openConvertation }) => {
-  // redux states :
+const ConvertationItem = ({
+  convertation: convertationData,
+  messageList,
+  messageRemoveConvertation,
 
-  const cutMessage = (message_text) => {
+  openConvertation,
+  getMessages,
+  removeConvertation,
+
+  resetGetConvertations,
+  resetRemoveConvertation,
+}) => {
+  // hooks :
+  const showDialog = useDialog();
+  const showAlert = useAlert();
+
+  // redux states:
+  const { loading: messageListLoading } = messageList;
+  const {
+    loading: messageRemoveConvertationLoading,
+    error: messageRemoveConvertationError,
+    success: messageRemoveConvertationSuccess,
+  } = messageRemoveConvertation;
+
+  const cutMessageHandler = (message_text) => {
     if (String(message_text).length >= 45) {
       return String(message_text).slice(0, 45) + "...";
     } else {
@@ -15,7 +44,16 @@ const ConvertationItem = ({ convertation, openConvertation }) => {
     }
   };
 
-  const lastMessageDate = (message_date) => {
+  const addZeroToNumber = (number) => {
+    const numArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    if (numArr.findIndex((num) => num === number) !== -1) {
+      return "0" + number;
+    } else {
+      return number;
+    }
+  };
+
+  const lastMessageDateHandler = (message_date) => {
     const sysDate = new Date();
     const msgDate = new Date(message_date);
     let date = "";
@@ -24,12 +62,21 @@ const ConvertationItem = ({ convertation, openConvertation }) => {
       sysDate.getMonth() === msgDate.getMonth() &&
       sysDate.getFullYear() === msgDate.getFullYear()
     ) {
-      date = msgDate.getHours() + ":" + msgDate.getMinutes();
+      date =
+        addZeroToNumber(msgDate.getHours()) +
+        ":" +
+        addZeroToNumber(msgDate.getMinutes());
+    } else if (
+      sysDate.getDate() - msgDate.getDate() === 1 &&
+      sysDate.getMonth() === msgDate.getMonth() &&
+      sysDate.getFullYear() === msgDate.getFullYear()
+    ) {
+      date = "yesterday";
     } else {
       date =
-        msgDate.getDate() +
+        addZeroToNumber(msgDate.getDate()) +
         "-" +
-        msgDate.getMonth() +
+        addZeroToNumber(Number(msgDate.getMonth() + 1)) +
         "-" +
         msgDate.getFullYear();
     }
@@ -38,44 +85,108 @@ const ConvertationItem = ({ convertation, openConvertation }) => {
   };
 
   const openConvHandler = () => {
-    openConvertation(convertation.user);
+    if (!messageListLoading) {
+      resetGetMessages();
+      getMessages(convertationData.user._id);
+      openConvertation(convertationData.user);
+    }
   };
 
+  const removeConvHandler = (e) => {
+    e.preventDefault();
+    showDialog({
+      title: "confirmation",
+      content: "Are you sure you want to delete this convertation ?",
+      onYes: () => {
+        removeConvertation(convertationData.user._id);
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (messageRemoveConvertationError) {
+      showAlert({
+        type: "danger",
+        title: "error",
+        content: messageRemoveConvertationError,
+      });
+    }
+
+    if (messageRemoveConvertationSuccess) {
+      resetRemoveConvertation();
+    }
+  }, [
+    resetRemoveConvertation,
+    showAlert,
+    messageRemoveConvertationSuccess,
+    messageRemoveConvertationError,
+  ]);
+
   return (
-    <ListGroup.Item className="convertation-item" onClick={openConvHandler}>
-      <div className="">
-        <Avatar image={convertation.user.avatar} />
+    <ListGroup.Item
+      className={`convertation-item${
+        messageListLoading || messageRemoveConvertationLoading
+          ? " convertation-item-loading"
+          : ""
+      }`}
+      onClick={openConvHandler}>
+      <div>
+        <Avatar image={convertationData.user.avatar} />
         <div className="d-flex flex-column convertation-item-inf">
-          <strong>{convertation.user.name}</strong>
+          <strong>{convertationData.user.name}</strong>
           <p
             className={
-              !convertation.message.isConnectedUserSeend &&
-              !convertation.message.isSeen
+              !convertationData.message.isConnectedUserSeend &&
+              !convertationData.message.isSeen
                 ? "not-seen-message"
                 : ""
             }>
-            {convertation.message.isConnectedUserSeend && (
+            {convertationData.message.isConnectedUserSeend && (
               <span className="me">Me :</span>
             )}
 
-            {cutMessage(convertation.message.message_text)}
+            {convertationData.message.message_text !== null
+              ? cutMessageHandler(convertationData.message.message_text)
+              : "sent a post"}
           </p>
         </div>
-        <div className="d-flex flex-column">
-          {convertation.message.nbr > 0 && (
-            <Badge>{convertation.message.nbr}</Badge>
+        <div className="d-flex flex-column convertation-item-inf-lss">
+          {convertationData.message.nbr > 0 && (
+            <Badge>{convertationData.message.nbr}</Badge>
           )}
-          <small>{lastMessageDate(convertation.message.message_date)}</small>
+          <small>
+            {lastMessageDateHandler(convertationData.message.message_date)}
+          </small>
         </div>
+        <Dropdown onClick={(e) => e.stopPropagation()}>
+          <Dropdown.Toggle size="sm"></Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item href="#" onClick={removeConvHandler}>
+              <i className="fas fa-trash text-danger"></i>
+              delete convertation
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
     </ListGroup.Item>
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
   return {
-    openConvertation: (data) => dispatch(openConvertation(data)),
+    messageList: state.messageList,
+    messageRemoveConvertation: state.messageRemoveConvertation,
   };
 };
 
-export default connect(null, mapDispatchToProps)(ConvertationItem);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getMessages: (id) => dispatch(getMessages(id)),
+    openConvertation: (data) => dispatch(openConvertation(data)),
+    removeConvertation: (id) => dispatch(removeConvertation(id)),
+    resetGetMessages: () => dispatch(resetGetMessages()),
+    resetRemoveConvertation: () => dispatch(resetRemoveConvertation()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConvertationItem);

@@ -1,7 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Message from "../models/messageModel.js";
 import User from "../models/userModel.js";
-import mongoose from "mongoose";
 
 // @desc    Send message
 // @route   POST /api/messages/:id
@@ -47,6 +46,58 @@ export const deleteMessage = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Add user to delete users array on all messages
+// @route   PUT /api/messages/convertation/:id
+// @access  Private
+export const deleteConvertationMessage = asyncHandler(async (req, res) => {
+  const connectedUser = await User.findById(req.user.id);
+  const otherUser = await User.findById(req.params.id);
+  if (otherUser) {
+    const removedMessages = await Message.updateMany(
+      {
+        $and: [
+          {
+            $or: [
+              {
+                message_from: connectedUser._id,
+                message_to: otherUser._id,
+              },
+              {
+                message_to: connectedUser._id,
+                message_from: otherUser._id,
+              },
+            ],
+          },
+          {
+            "delete_users.user": {
+              $ne: connectedUser._id,
+            },
+          },
+        ],
+      },
+      {
+        $push: { delete_users: { user: connectedUser._id } },
+      }
+    );
+    const nbr = await Message.find({
+      $and: [
+        { message_to: req.user.id },
+        { isSeen: false },
+        {
+          "delete_users.user": {
+            $ne: req.user.id,
+          },
+        },
+      ],
+    }).count();
+
+    res.json(nbr);
+  } else {
+    res.status(404);
+    throw new Error("user not found !");
+  }
+});
+
 // @desc    Get all messages between two users
 // @route   GET /api/messages/:id
 // @access  Private
@@ -75,7 +126,13 @@ export const getMessages = asyncHandler(async (req, res) => {
           },
         },
       ],
-    }).select("-delete_users");
+    })
+      .populate({
+        path: "message_post",
+        match: { message_post: { $ne: null } },
+        populate: "user",
+      })
+      .select("-delete_users");
 
     res.json(messages);
   } else {
@@ -126,6 +183,11 @@ export const getLastMessages = asyncHandler(async (req, res) => {
               {
                 isSeen: false,
               },
+              {
+                "delete_users.user": {
+                  $ne: connectedUser._id,
+                },
+              },
             ],
           }).count();
 
@@ -154,6 +216,11 @@ export const getLastMessages = asyncHandler(async (req, res) => {
               },
               {
                 isSeen: false,
+              },
+              {
+                "delete_users.user": {
+                  $ne: connectedUser._id,
+                },
               },
             ],
           }).count();
@@ -188,7 +255,15 @@ export const getLastMessages = asyncHandler(async (req, res) => {
 // @access  Private
 export const getNotSeenCountMessages = asyncHandler(async (req, res) => {
   const nbr = await Message.find({
-    $and: [{ message_to: req.user.id }, { isSeen: false }],
+    $and: [
+      { message_to: req.user.id },
+      { isSeen: false },
+      {
+        "delete_users.user": {
+          $ne: req.user.id,
+        },
+      },
+    ],
   }).count();
 
   res.json(nbr);
@@ -198,11 +273,10 @@ export const getNotSeenCountMessages = asyncHandler(async (req, res) => {
 // @route   PUT /api/messages/seen/:id
 // @access  Private
 export const seenAllMessages = asyncHandler(async (req, res) => {
-  console.log("Hello world");
   const otherUser = await User.findById(req.params.id);
   if (otherUser) {
     const connectedUser = await User.findById(req.user.id);
-    await Messages[i].updateMany(
+    await Message.updateMany(
       {
         $and: [
           { isSeen: false },
@@ -220,7 +294,20 @@ export const seenAllMessages = asyncHandler(async (req, res) => {
         },
       }
     );
-    res.json({ message: "All messages have been seen" });
+
+    const nbr = await Message.find({
+      $and: [
+        { message_to: req.user.id },
+        { isSeen: false },
+        {
+          "delete_users.user": {
+            $ne: req.user.id,
+          },
+        },
+      ],
+    }).count();
+
+    res.json(nbr);
   } else {
     res.status(404);
     throw new Error("User not found !");

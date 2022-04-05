@@ -54,7 +54,7 @@ const ChangeName = ({
       showAlert({
         title: "alert",
         type: "success",
-        content: "your name have been changed with seccuessfuly",
+        content: "your name have been changed with successfully",
       });
       resetChangeNameUser();
     }
