@@ -1,0 +1,2 @@
+export const SHARE_POST_OPEN = "SHARE_POST_OPEN";
+export const SHARE_POST_CLOSE = "SHARE_POST_CLOSE";

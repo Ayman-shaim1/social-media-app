@@ -19,6 +19,7 @@ const ConvertationsContainer = ({
   const showAlert = useAlert();
   // states:
   const [isCallApi, setIsCallApi] = useState(false);
+  const [search, setSearch] = useState("");
   // redux states :
   const { loading, error, convertations } = messageGetConvertations;
 
@@ -36,14 +37,24 @@ const ConvertationsContainer = ({
       });
       resetGetConvertations();
     }
-  }, [error, isCallApi, showAlert, getConvertations, resetGetConvertations]);
+  }, [
+    error,
+    isCallApi,
+    showAlert,
+    getConvertations,
+    resetGetConvertations,
+    convertations,
+  ]);
 
   return (
     <div className={show ? "d-block" : "d-none"}>
       <div className="mb-2">
-        <Form>
-          <Form.Control size="sm" placeholder="search convertation ..." />
-        </Form>
+        <Form.Control
+          size="sm"
+          placeholder="search convertation ..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
       {loading ? (
         <div className="mt-5 pt-2">
@@ -56,12 +67,25 @@ const ConvertationsContainer = ({
       ) : (
         convertations.length > 0 && (
           <ListGroup>
-            {convertations.map((convertation) => (
-              <ConvertationItem
-                convertation={convertation}
-                key={convertation.user._id}
-              />
-            ))}
+            {search !== ""
+              ? convertations
+                  .filter((c) =>
+                    String(c.user.name)
+                      .toLocaleLowerCase()
+                      .startsWith(search.toLocaleLowerCase())
+                  )
+                  .map((convertation) => (
+                    <ConvertationItem
+                      convertation={convertation}
+                      key={convertation.user._id}
+                    />
+                  ))
+              : convertations.map((convertation) => (
+                  <ConvertationItem
+                    convertation={convertation}
+                    key={convertation.user._id}
+                  />
+                ))}
           </ListGroup>
         )
       )}

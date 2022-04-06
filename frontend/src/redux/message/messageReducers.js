@@ -132,16 +132,19 @@ export const messageGetConvertationsReducer = (
     case MESSAGE_GET_CONVERTATIONS_UPDATE_MESSAGE:
       return {
         convertations: messageGetConvertationUpdate(state, payload),
+        success: true,
       };
     case MESSAGE_GET_CONVERTATIONS_UPDATE_REMOVE_CONV:
       return {
         convertations: state.convertations.filter(
           (c) => String(c.user._id) !== String(payload)
         ),
+        success: true,
       };
     case MESSAGE_GET_CONVERTATIONS_UPDATE_REMOVE_MESSAGE:
       return {
         convertations: messageGetConvertationUpdateRemove(state, payload),
+        success: true,
       };
     case MESSAGE_GET_CONVERTATIONS_UPDATE_SEEN_ALL:
       return {
@@ -152,6 +155,7 @@ export const messageGetConvertationsReducer = (
           }
           return convertation;
         }),
+        success: true,
       };
     case MESSAGE_GET_CONVERTATIONS_FAIL:
       return { convertations: [], error: payload };
@@ -202,7 +206,7 @@ export const messageSendReducer = (state = {}, action) => {
     case MESSAGE_SEND_REQUEST:
       return { loading: true };
     case MESSAGE_SEND_SUCCESS:
-      return { loading: false, message: payload };
+      return { loading: false, message: payload, success: true };
     case MESSAGE_SEND_FAIL:
       return { loading: false, error: payload };
     case MESSAGE_SEND_RESET:

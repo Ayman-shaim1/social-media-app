@@ -14,7 +14,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import useDialog from "../hooks/useDialog";
 import useAlert from "../hooks/useAlert";
 import Video from "./Video";
-
+import { openSharePost } from "../redux/sharePost/sharePostActions";
 const Post = ({
   post,
   likePost,
@@ -26,6 +26,7 @@ const Post = ({
   resetUnlikePost,
   postLike,
   postUnlike,
+  openSharePost,
 }) => {
   // hooks :
   const showDialog = useDialog();
@@ -57,6 +58,11 @@ const Post = ({
         removePost(post._id);
       },
     });
+  };
+
+  const sharePostHandler = (e) => {
+    e.preventDefault();
+    openSharePost(post._id);
   };
 
   useEffect(() => {
@@ -194,7 +200,8 @@ const Post = ({
             </span>
           </Link>
           <Link
-            to={`/Messages/${post.user._id}/${post._id}`}
+            to="#"
+            onClick={sharePostHandler}
             className="ps-action d-flex align-items-center justify-content-center w-100 mt-0 btn btn-sm">
             <i className="fas fa-share"></i>&nbsp;share
           </Link>
@@ -214,6 +221,7 @@ const mapDispatchToProps = (dispatch) => {
     likePost: (id) => dispatch(likePost(id)),
     unLikePost: (id) => dispatch(unLikePost(id)),
     removePost: (id) => dispatch(removePost(id)),
+    openSharePost: (id) => dispatch(openSharePost(id)),
     resetLikePost: () => dispatch(resetLikePost()),
     resetUnlikePost: () => dispatch(resetUnlikePost()),
   };

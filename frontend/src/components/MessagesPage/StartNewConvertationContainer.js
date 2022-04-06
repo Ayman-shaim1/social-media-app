@@ -14,6 +14,7 @@ const StartNewConvertationContainer = ({
   const showAlert = useAlert();
   // states :
   const [isCallApi, setIsCallApi] = useState(false);
+  const [search, setSearch] = useState("");
   // redux states :
   const { loading, error, users } = userGetFollowers;
   useEffect(() => {
@@ -33,9 +34,12 @@ const StartNewConvertationContainer = ({
   return (
     <div className={!show ? "d-block" : "d-none"}>
       <div className="mb-2">
-        <Form>
-          <Form.Control size="sm" placeholder="search users ..." />
-        </Form>
+        <Form.Control
+          size="sm"
+          placeholder="search users ..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
       {loading ? (
         <div className="mt-5 pt-2">
@@ -48,9 +52,19 @@ const StartNewConvertationContainer = ({
       ) : (
         users.length > 0 && (
           <ListGroup className="start-new-conv-container">
-            {users.map((user) => (
-              <StartNewConvertationItem key={user._id} user={user} />
-            ))}
+            {search !== ""
+              ? users
+                  .filter((u) =>
+                    String(u.user.name)
+                      .toLocaleLowerCase()
+                      .startsWith(search.toLocaleLowerCase())
+                  )
+                  .map((user) => (
+                    <StartNewConvertationItem key={user.user._id} user={user} />
+                  ))
+              : users.map((user) => (
+                  <StartNewConvertationItem key={user.user._id} user={user} />
+                ))}
           </ListGroup>
         )
       )}

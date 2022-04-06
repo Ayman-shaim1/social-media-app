@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Post from "../components/Post";
 import { Row, Col } from "react-bootstrap";
 import { connect } from "react-redux";
@@ -22,12 +22,16 @@ const HomePage = ({
 }) => {
   // hooks:
   const showAlert = useAlert();
+  // states :
+  const [isCallApi, setIsCallApi] = useState(false);
+
   // redux states :
   const { error, loading, posts } = postList;
 
   useEffect(() => {
-    if (!error && posts.length === 0) {
+    if (!isCallApi) {
       getPosts();
+      setIsCallApi(true);
     }
 
     if (error) {
@@ -46,9 +50,9 @@ const HomePage = ({
   }, [
     error,
     getPosts,
-    posts.length,
+    isCallApi,
+    showAlert,
     resetRemovePost,
-    resetCreatePost,
     resetLikePost,
     resetUnlikePost,
   ]);

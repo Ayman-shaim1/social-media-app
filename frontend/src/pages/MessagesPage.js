@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   Row,
@@ -13,16 +13,31 @@ import StartChattingAlert from "../components/MessagesPage/StartChattingAlert";
 import { connect } from "react-redux";
 
 import StartNewConvertationContainer from "../components/MessagesPage/StartNewConvertationContainer";
+import { closeConvertation } from "../redux/convertation/convertationActions";
+import { resetGetMessages } from "../redux/message/messageActions";
 
-const MessagesPage = ({ convertation }) => {
+const MessagesPage = ({
+  convertation,
+  resetGetMessages,
+  closeConvertation,
+}) => {
   // states :
   const [showConv, setShowConv] = useState(true);
+  const [isFirstCall, setIsFirstCall] = useState(false);
   // redux states:
   const { isOpen } = convertation;
 
   const showConvHandler = () => {
     setShowConv(!showConv);
   };
+
+  useEffect(() => {
+    if (!isFirstCall) {
+      resetGetMessages();
+      closeConvertation();
+      setIsFirstCall(true);
+    }
+  }, [isFirstCall, resetGetMessages, closeConvertation]);
 
   return (
     <Row>
@@ -78,4 +93,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(MessagesPage);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    closeConvertation: () => dispatch(closeConvertation()),
+    resetGetMessages: () => dispatch(resetGetMessages()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessagesPage);

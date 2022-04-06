@@ -52,6 +52,7 @@ import {
 } from "./message/messageReducers";
 
 import convertationReducer from "./convertation/convertationReducer";
+import sharePostReducer from "./sharePost/sharePostReducer";
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
@@ -79,7 +80,7 @@ const reducer = combineReducers({
   userChangePassword: userChangePasswordReducer,
   userChangeAvatar: userChangeAvatarReducer,
   userCheckFollow: userCheckFollowReducer,
-  userGetFollowers:userGetFollowersReducer,
+  userGetFollowers: userGetFollowersReducer,
 
   postList: postListReducer,
   postCreate: postCreateReducer,
@@ -104,6 +105,7 @@ const reducer = combineReducers({
   messageSeenAll: messageSeenAllReducer,
 
   convertation: convertationReducer,
+  sharePost: sharePostReducer,
 });
 
 const store = createStore(

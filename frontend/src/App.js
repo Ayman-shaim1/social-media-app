@@ -8,6 +8,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Header from "./components/Header";
 import Alert from "./components/Alert";
 import Dialog from "./components/Dialog";
+import SharePostContainer from "./components/SharePostContainer";
 
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -19,6 +20,7 @@ import SettingsPage from "./pages/SettingsPage";
 import FindFriendsPage from "./pages/FindFriendsPage";
 import RequestsPage from "./pages/RequestsPage";
 import NotFoundPage from "./pages/NotFoundPage";
+
 const App = () => {
   // redux states :
   const userLogin = useSelector((state) => state.userLogin);
@@ -30,6 +32,7 @@ const App = () => {
       <main className="p-2">
         <Alert />
         <Dialog />
+        <SharePostContainer />
 
         <Container fluid>
           <Routes>

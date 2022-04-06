@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, ListGroup } from "react-bootstrap";
+import {  ListGroup } from "react-bootstrap";
 import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -17,7 +17,7 @@ const UsersDropdown = ({ show, userFind, hide }) => {
         </div>
       ) : users && users.length > 0 ? (
         users.map((user) => (
-          <ListGroup.Item key={user.key} className="drp-user-item">
+          <ListGroup.Item key={user._id} className="drp-user-item">
             <Link to={`/profile/${user._id}`} onClick={hide}>
               <div className="d-flex align-items-center">
                 <Avatar image={user.avatar} />

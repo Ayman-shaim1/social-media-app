@@ -6,7 +6,6 @@ import {
   MESSAGE_GET_CONVERTATIONS_UPDATE_MESSAGE,
   MESSAGE_GET_CONVERTATIONS_UPDATE_REMOVE_CONV,
   MESSAGE_GET_CONVERTATIONS_UPDATE_REMOVE_MESSAGE,
-
   MESSAGE_GET_NOTSEEN_COUNT_FAIL,
   MESSAGE_GET_NOTSEEN_COUNT_REQUEST,
   MESSAGE_GET_NOTSEEN_COUNT_RESET,
@@ -18,7 +17,6 @@ import {
   MESSAGE_GET_LIST_SUCCESS,
   MESSAGE_GET_LIST_UPDATE_PUSH,
   MESSAGE_GET_LIST_UPDATE_REMOVE,
-
   MESSAGE_SEND_FAIL,
   MESSAGE_SEND_REQUEST,
   MESSAGE_SEND_SUCCESS,
@@ -120,7 +118,12 @@ export const getMessages = (id) => {
   };
 };
 
-export const sendMessage = (id, message_text) => {
+export const sendMessage = (
+  id,
+  message,
+  isMessagePost = false,
+  pushMessage = true
+) => {
   return async (dispatch, getState) => {
     try {
       dispatch({ type: MESSAGE_SEND_REQUEST });
@@ -142,30 +145,38 @@ export const sendMessage = (id, message_text) => {
           authorization: `Bearer ${userInfo.token} `,
         },
       };
+
+      const objToSend = {};
+      if (isMessagePost) {
+        objToSend.message_post = message;
+      } else {
+        objToSend.message_text = message;
+      }
+
       const { data } = await axios.post(
         `/api/messages/${id}`,
-        { message_text },
+        objToSend,
         config
       );
       dispatch({
         type: MESSAGE_SEND_SUCCESS,
         payload: data,
       });
+      if (pushMessage) {
+        let index = convertations.findIndex(
+          (c) => String(c.user._id) === String(user._id)
+        );
+        dispatch({
+          type: MESSAGE_GET_CONVERTATIONS_UPDATE_MESSAGE,
+          payload: {
+            message: data,
+            user: user,
+            isConvExiste: index !== -1 ? true : false,
+          },
+        });
 
-      dispatch({ type: MESSAGE_GET_LIST_UPDATE_PUSH, payload: data });
-
-      let index = convertations.findIndex(
-        (c) => String(c.user._id) === String(user._id)
-      );
-
-      dispatch({
-        type: MESSAGE_GET_CONVERTATIONS_UPDATE_MESSAGE,
-        payload: {
-          message: data,
-          user: user,
-          isConvExiste: index !== -1 ? true : false,
-        },
-      });
+        dispatch({ type: MESSAGE_GET_LIST_UPDATE_PUSH, payload: data });
+      }
     } catch (error) {
       const err =
         error.response && error.response.data.message
@@ -314,8 +325,6 @@ export const seenAllMessages = (id) => {
         type: MESSAGE_GET_NOTSEEN_COUNT_UPDATE,
         payload: data,
       });
-
-      
     } catch (error) {
       const err =
         error.response && error.response.data.message

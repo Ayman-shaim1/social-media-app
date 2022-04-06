@@ -9,7 +9,6 @@ import {
   resetLikePost,
   resetUnlikePost,
   resetRemovePost,
-  resetGetByIdPost,
 } from "../redux/post/postActions";
 import Loader from "../components/Loader";
 import useAlert from "../hooks/useAlert";
@@ -20,6 +19,8 @@ import CommentItem from "../components/PostPage/CommentItem";
 import AddComment from "../components/PostPage/AddComment";
 import useDialog from "../hooks/useDialog";
 import Video from "../components/Video";
+import { openSharePost } from "../redux/sharePost/sharePostActions";
+
 const PostPage = ({
   getByIdPost,
   postById,
@@ -33,7 +34,7 @@ const PostPage = ({
   postLike,
   postUnlike,
   resetRemovePost,
-  resetGetByIdPost,
+  openSharePost,
 }) => {
   // hooks :
   const showDialog = useDialog();
@@ -72,6 +73,11 @@ const PostPage = ({
     });
   };
 
+  const sharePostHandler = (e) => {
+    e.preventDefault();
+    openSharePost(post._id);
+  };
+
   useEffect(() => {
     if (!callApi) {
       getByIdPost(params.id);
@@ -100,14 +106,6 @@ const PostPage = ({
           }
         }
       }
-    }
-
-    if (error) {
-      showAlert({
-        type: "danger",
-        title: "Error",
-        content: error,
-      });
     }
 
     if (errorPostDelete) {
@@ -161,7 +159,7 @@ const PostPage = ({
     successPostUnlike,
     post,
     success,
-    error,
+
     errorPostDelete,
     callApi,
     getByIdPost,
@@ -179,6 +177,15 @@ const PostPage = ({
         </Col>
         <Col xl={6} lg={6} md={8} sm={12}>
           {loading && <Loader />}
+          {error && (
+            <div className="m-4 p-5">
+              <div className="m-4 p-5">
+                <div className="d-flex justify-content-center">
+                  <small>{error}</small>
+                </div>
+              </div>
+            </div>
+          )}
           {isPrivatePage ? (
             <Alert variant="danger">
               <div className="d-flex justify-content-center">
@@ -264,7 +271,8 @@ const PostPage = ({
                         </Link>
                       )}
                       <Link
-                        to={`/messages/${post.user._id}/${post._id}`}
+                        to="#"
+                        onClick={sharePostHandler}
                         className="ps-action d-flex align-items-center justify-content-center w-100 mt-0 btn btn-sm">
                         <i className="fas fa-share"></i>&nbsp;share
                       </Link>
@@ -311,10 +319,10 @@ const mapDispatchToProps = (dispatch) => {
     removePost: (id) => dispatch(removePost(id)),
     likePost: (id) => dispatch(likePost(id)),
     unLikePost: (id) => dispatch(unLikePost(id)),
+    openSharePost: (id) => dispatch(openSharePost(id)),
     resetLikePost: () => dispatch(resetLikePost()),
     resetUnlikePost: () => dispatch(resetUnlikePost()),
     resetRemovePost: () => dispatch(resetRemovePost()),
-    resetGetByIdPost: () => dispatch(resetGetByIdPost()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(PostPage);

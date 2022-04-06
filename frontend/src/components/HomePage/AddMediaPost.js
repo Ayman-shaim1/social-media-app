@@ -75,12 +75,11 @@ const AddMediaPost = ({
       setMediaUrl("");
       setMedia(null);
       setText("");
-      resetCreatePost();
     }
     if (success) {
       hideModal();
     }
-  }, [error, show, success]);
+  }, [error, show, success,  hideModal, showAlert]);
 
   return (
     <Modal show={show} fullscreen={true} onHide={hideModal}>

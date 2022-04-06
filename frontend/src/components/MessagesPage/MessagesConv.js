@@ -88,8 +88,7 @@ const MessagesConv = ({
   };
 
   useEffect(() => {
-    convBodyRef.current.scrollTop = convBodyRef.current.scrollHeight * 100;
-
+    convBodyRef.current.scrollTo(0, convBodyRef.current.scrollHeight * 100000);
     if (messageRemoveConvertationError) {
       showAlert({
         type: "danger",

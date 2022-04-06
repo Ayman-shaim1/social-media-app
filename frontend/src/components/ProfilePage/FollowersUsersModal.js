@@ -1,5 +1,5 @@
-import React from "react";
-import { Modal, Alert } from "react-bootstrap";
+import React, { useState } from "react";
+import { Modal, Alert, Form } from "react-bootstrap";
 import UserItemFollowers from "./UserItemFollowers";
 
 const FollowersUsersModal = ({
@@ -9,21 +9,54 @@ const FollowersUsersModal = ({
   users,
   isUserProfile,
 }) => {
+  // states :
+  const [search, setSearch] = useState("");
   return (
     <Modal show={showUsers} onHide={hideUsers} centered>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        <div className="mb-3">
+          <Form.Control
+            placeholder="search users ..."
+            size="sm"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
         {users.length > 0 ? (
-          <div className="">
-            {users.map((user) => (
-              <UserItemFollowers
-                user={user.user}
-                key={user.user._id}
-                isUserProfile={isUserProfile}
-              />
-            ))}
+          <div
+            style={{
+              height: "400px",
+              overflowY: "auto",
+              padding: "10px",
+            }}>
+            {search === ""
+              ? users.map((user) => (
+                  <UserItemFollowers
+                    user={user.user}
+                    key={user.user._id}
+                    isUserProfile={isUserProfile}
+                  />
+                ))
+              : users
+                  .filter(
+                    (u) =>
+                      String(u.user.name)
+                        .toLocaleLowerCase()
+                        .startsWith(search.toLocaleLowerCase()) ||
+                      String(u.user.email)
+                        .toLocaleLowerCase()
+                        .startsWith(search.toLocaleLowerCase())
+                  )
+                  .map((user) => (
+                    <UserItemFollowers
+                      user={user.user}
+                      key={user.user._id}
+                      isUserProfile={isUserProfile}
+                    />
+                  ))}
           </div>
         ) : (
           <Alert className="p-4" variant="danger">
