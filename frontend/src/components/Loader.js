@@ -9,7 +9,7 @@ function Loader({ size }) {
       style={{
         width:
           size === "sm"
-            ? "20px"
+            ? "15px"
             : size === "md"
             ? "35px"
             : size === "lg"
@@ -17,7 +17,7 @@ function Loader({ size }) {
             : size === undefined && "100px",
         height:
           size === "sm"
-            ? "20px"
+            ? "15px"
             : size === "md"
             ? "35px"
             : size === "lg"

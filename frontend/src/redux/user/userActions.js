@@ -39,6 +39,10 @@ import {
   USER_CHANGE_NAME_REQUEST,
   USER_CHANGE_NAME_RESET,
   USER_CHANGE_NAME_SUCCESS,
+  USER_CHANGE_ACCOUNT_STATE_FAIL,
+  USER_CHANGE_ACCOUNT_STATE_REQUEST,
+  USER_CHANGE_ACCOUNT_STATE_RESET,
+  USER_CHANGE_ACCOUNT_STATE_SUCCESS,
   USER_CHANGE_AVATAR_FAIL,
   USER_CHANGE_AVATAR_REQUEST,
   USER_CHANGE_AVATAR_RESET,
@@ -575,6 +579,40 @@ export const resetChangeAvatarUser = () => {
   return { type: USER_CHANGE_AVATAR_RESET };
 };
 
+export const changeAccountState = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: USER_CHANGE_ACCOUNT_STATE_REQUEST });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${userInfo.token} `,
+        },
+      };
+
+      const { data } = await axios.put(`/api/users/state`, {}, config);
+
+      dispatch({ type: USER_CHANGE_ACCOUNT_STATE_SUCCESS, payload: data });
+      dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+    } catch (error) {
+      const err =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({ type: USER_CHANGE_ACCOUNT_STATE_FAIL, payload: err });
+    }
+  };
+};
+
+export const resetChangeAccountState = () => {
+  return { type: USER_CHANGE_ACCOUNT_STATE_RESET };
+};
+
 export const getFollowers = () => {
   return async (dispatch, getState) => {
     try {
@@ -594,8 +632,6 @@ export const getFollowers = () => {
         `/api/users/followers/${userInfo._id}`,
         config
       );
-
-
 
       dispatch({ type: USER_GET_FOLLOWERS_SUCCESS, payload: data });
     } catch (error) {

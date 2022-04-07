@@ -73,12 +73,9 @@ const ConvertationItem = ({
     ) {
       date = "yesterday";
     } else {
-      date =
-        addZeroToNumber(msgDate.getDate()) +
-        "-" +
-        addZeroToNumber(Number(msgDate.getMonth() + 1)) +
-        "-" +
-        msgDate.getFullYear();
+      date = `${addZeroToNumber(msgDate.getDate())}/${addZeroToNumber(
+        Number(msgDate.getMonth() + 1)
+      )}/${msgDate.getFullYear()}`;
     }
 
     return date;

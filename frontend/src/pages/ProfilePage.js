@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import Post from "../components/Post";
 import Avatar from "../components/Avatar";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import useAlert from "../hooks/useAlert";
 import useDialog from "../hooks/useDialog";
@@ -22,6 +22,10 @@ import {
   resetUnFollowUser,
   resetGetByIdUser,
 } from "../redux/user/userActions";
+
+import { openConvertation } from "../redux/convertation/convertationActions";
+import { getMessages } from "../redux/message/messageActions";
+
 import Loader from "../components/Loader";
 
 import FollowersUsersModal from "../components/ProfilePage/FollowersUsersModal";
@@ -32,10 +36,14 @@ const ProfilePage = ({
   userLogin,
   getByIdUser,
   followUser,
+  getMessages,
+  openConvertation,
+
   userFollow,
   userById,
   unFollowUser,
   userUnFollow,
+
   resetGetByIdUser,
   resetFollowUser,
   resetUnFollowUser,
@@ -44,6 +52,7 @@ const ProfilePage = ({
   const showAlert = useAlert();
   const showDialog = useDialog();
   const params = useParams();
+  const navigate = useNavigate();
 
   // states :
   const [callApi, setCallApi] = useState(false);
@@ -97,6 +106,21 @@ const ProfilePage = ({
     });
   };
 
+  const sendMessageHandler = (e) => {
+    e.preventDefault();
+    if (user) {
+      navigate("/messages");
+      setTimeout(() => {
+        openConvertation({
+          _id: user._id,
+          name: user.name,
+          avatar: user.avatar,
+        });
+        getMessages(user._id);
+      }, 500);
+    }
+  };
+
   const btns = [
     {
       state: "follow",
@@ -129,7 +153,8 @@ const ProfilePage = ({
             placement="top"
             overlay={<Tooltip> sent a message to this user</Tooltip>}>
             <Link
-              to={`/messages/${user && user._id}`}
+              to="#"
+              onClick={sendMessageHandler}
               className="btn btn-sm btn-light w-50 m-1">
               <i className="fas fa-message"></i> sent a message
             </Link>
@@ -420,6 +445,9 @@ const mapDispatchToProps = (dispatch) => {
     getByIdUser: (id) => dispatch(getByIdUser(id)),
     unFollowUser: (id) => dispatch(unFollowUser(id)),
     followUser: (id) => dispatch(followUser(id)),
+    getMessages: (id) => dispatch(getMessages(id)),
+    openConvertation: (data) => dispatch(openConvertation(data)),
+
     resetFollowUser: () => dispatch(resetFollowUser()),
     resetUnFollowUser: () => dispatch(resetUnFollowUser()),
     resetGetByIdUser: () => dispatch(resetGetByIdUser()),

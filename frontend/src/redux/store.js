@@ -19,6 +19,7 @@ import {
   userChangeNameReducer,
   userChangeAvatarReducer,
   userChangePasswordReducer,
+  userChangeAccountStateReducer,
   userCheckFollowReducer,
   userGetFollowersReducer,
 } from "./user/userReducers";
@@ -76,6 +77,7 @@ const reducer = combineReducers({
   userRejectFollow: userRejectFollowReducer,
   userUnFollow: userUnFollowReducer,
   userChangeName: userChangeNameReducer,
+  userChangeAccountState: userChangeAccountStateReducer,
   userRemoveFollow: userRemoveFollowReducer,
   userChangePassword: userChangePasswordReducer,
   userChangeAvatar: userChangeAvatarReducer,

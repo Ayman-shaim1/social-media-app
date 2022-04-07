@@ -22,6 +22,10 @@ import {
   USER_CHANGE_PASSWORD_REQUEST,
   USER_CHANGE_PASSWORD_RESET,
   USER_CHANGE_PASSWORD_SUCCESS,
+  USER_CHANGE_ACCOUNT_STATE_FAIL,
+  USER_CHANGE_ACCOUNT_STATE_REQUEST,
+  USER_CHANGE_ACCOUNT_STATE_RESET,
+  USER_CHANGE_ACCOUNT_STATE_SUCCESS,
   USER_FIND_FAIL,
   USER_FIND_REQUEST,
   USER_FIND_RESET,
@@ -297,6 +301,22 @@ export const userChangePasswordReducer = (state = {}, action) => {
     case USER_CHANGE_PASSWORD_FAIL:
       return { loading: false, error: payload };
     case USER_CHANGE_PASSWORD_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const userChangeAccountStateReducer = (state = {}, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case USER_CHANGE_ACCOUNT_STATE_REQUEST:
+      return { loading: true };
+    case USER_CHANGE_ACCOUNT_STATE_SUCCESS:
+      return { loading: false, success: true, user: payload };
+    case USER_CHANGE_ACCOUNT_STATE_FAIL:
+      return { loading: false, error: payload };
+    case USER_CHANGE_ACCOUNT_STATE_RESET:
       return {};
     default:
       return state;

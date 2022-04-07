@@ -31,6 +31,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       avatar: user.avatar,
+      isPrivateAccount: user.isPrivateAccount,
       token: generateToken(user._id),
     });
   } else {
@@ -52,6 +53,8 @@ export const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       avatar: user.avatar,
+      isPrivateAccount: user.isPrivateAccount,
+
       token: generateToken(user._id),
     });
   } else {
@@ -73,6 +76,7 @@ export const updateNameUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       avatar: user.avatar,
+      isPrivateAccount: user.isPrivateAccount,
       token: generateToken(user._id),
     });
   } else {
@@ -96,6 +100,7 @@ export const updatePassswordUser = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         avatar: user.avatar,
+        isPrivateAccount: user.isPrivateAccount,
         token: generateToken(user._id),
       });
     } else {
@@ -126,6 +131,7 @@ export const updateAvatarUser = asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             avatar: user.avatar,
+            isPrivateAccount: user.isPrivateAccount,
             token: generateToken(user._id),
           });
         } else {
@@ -136,6 +142,7 @@ export const updateAvatarUser = asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             avatar: user.avatar,
+            isPrivateAccount: user.isPrivateAccount,
             token: generateToken(user._id),
           });
         }
@@ -146,9 +153,36 @@ export const updateAvatarUser = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         avatar: user.avatar,
+        isPrivateAccount: user.isPrivateAccount,
         token: generateToken(user._id),
       });
     }
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc    Update user password
+// @route   PUT /api/users/state
+// @access  Private
+export const updateAccountStateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (user) {
+    if (user.isPrivateAccount) {
+      user.isPrivateAccount = false;
+    } else {
+      user.isPrivateAccount = true;
+    }
+    await user.save();
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      isPrivateAccount: user.isPrivateAccount,
+      token: generateToken(user._id),
+    });
   } else {
     res.status(404);
     throw new Error("User not found");
@@ -441,9 +475,9 @@ export const getFollowersRequestsUsers = asyncHandler(async (req, res) => {
 // @route   GET /api/users/followers/:id
 // @access  Private
 export const getFollowersUsers = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).populate("followers.user").select(
-    "-password -notifications"
-  );
+  const user = await User.findById(req.params.id)
+    .populate("followers.user")
+    .select("-password -notifications");
   if (user) {
     res.json(user.followers.filter((u) => u.isAccepted));
   } else {

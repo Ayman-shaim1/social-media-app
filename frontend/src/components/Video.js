@@ -59,11 +59,7 @@ const Video = ({ src }) => {
       (+e.target.value * videoRef.current.duration) / 100;
   };
 
-  // const onClickSetVideoProgressHandler = (e) => {
-  //   setProgress(e.target.value);
-  //   videoRef.current.currentTime =
-  //     (+progress * videoRef.current.duration) / 100;
-  // };
+  
 
   return (
     <div className="post-video-container">

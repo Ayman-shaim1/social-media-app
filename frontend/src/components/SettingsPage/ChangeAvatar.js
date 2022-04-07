@@ -101,7 +101,11 @@ const ChangeAvatar = ({
       )}
 
       <Form.Group>
-        <Form.Control type="file" onChange={uploadFileHandler} />
+        <Form.Control
+          type="file"
+          onChange={uploadFileHandler}
+          accept="image/gif, image/jpeg, image/png"
+        />
       </Form.Group>
 
       <div className="mt-2 d-grid gap-2">

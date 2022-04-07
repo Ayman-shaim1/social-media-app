@@ -283,11 +283,15 @@ textarea {
   font-weight: bold;
   font-size: 14px;
 }
+
 .convertation-item div .convertation-item-inf-lss {
-  width: 90px;
+  width: 80px;
 }
 .convertation-item div .convertation-item-inf-lss .badge {
   width: 20px;
+}
+.convertation-item div .convertation-item-inf-lss small {
+  font-size: 10px;
 }
 .convertation-item div .dropdown {
   visibility: hidden;
@@ -418,13 +422,21 @@ textarea {
   color: #f4f4f4;
   border: none;
   font-size: 50px;
+  display: none;
 }
 .post-video-container .controls {
   position: absolute;
+  display: none;
   bottom: 5%;
   width: 100%;
   padding: 10px 30px;
 }
+
+.post-video-container:hover .controls,
+.post-video-container:hover .post-video-play-btn {
+  display: block;
+}
+
 .post-video-container .controls .ifc-controls {
   display: flex;
   justify-content: space-between;
@@ -434,6 +446,5 @@ textarea {
 .post-video-container .controls .ifc-controls .volume-btn {
   cursor: pointer;
 }
-
 
 /* End post Video */

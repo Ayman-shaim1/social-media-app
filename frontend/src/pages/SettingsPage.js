@@ -1,8 +1,10 @@
 import React from "react";
 import { Tab, Row, Col, Nav } from "react-bootstrap";
-import ChangePassword from "../components/SettingsPage/ChangePassword";
+
 import ChangeName from "../components/SettingsPage/ChangeName";
+import ChangePassword from "../components/SettingsPage/ChangePassword";
 import ChangeAvatar from "../components/SettingsPage/ChangeAvatar";
+import ChangeAccountState from "../components/SettingsPage/ChangeAccountState";
 
 const SettingsPage = () => {
   return (
@@ -21,6 +23,9 @@ const SettingsPage = () => {
             <Nav.Item className="cursor-pointer">
               <Nav.Link eventKey="third">change your avatar</Nav.Link>
             </Nav.Item>
+            <Nav.Item className="cursor-pointer">
+              <Nav.Link eventKey="fourth">change account state</Nav.Link>
+            </Nav.Item>
           </Nav>
         </Col>
         <Col sm={12} md={12} lg={7} xl={7}>
@@ -33,6 +38,9 @@ const SettingsPage = () => {
             </Tab.Pane>
             <Tab.Pane eventKey="third">
               <ChangeAvatar />
+            </Tab.Pane>
+            <Tab.Pane eventKey="fourth">
+              <ChangeAccountState />
             </Tab.Pane>
           </Tab.Content>
         </Col>

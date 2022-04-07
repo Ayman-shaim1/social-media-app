@@ -4,7 +4,7 @@ import Avatar from "./Avatar";
 import { sendMessage } from "../redux/message/messageActions";
 import { connect } from "react-redux";
 import Loader from "../components/Loader";
-
+import { Link } from "react-router-dom";
 const SharePostUserItem = ({ user, sendMessage, sharePost, messageSend }) => {
   // states :
   const [loading, setLoading] = useState(false);
@@ -28,13 +28,15 @@ const SharePostUserItem = ({ user, sendMessage, sharePost, messageSend }) => {
         setSuccess(true);
       }
     }
-  }, [messageSendSuccess]);
+  }, [messageSendSuccess, message, user]);
 
   return (
     <ListGroup.Item>
       <div className="d-flex align-items-center justify-content-between">
         <div className="d-flex align-items-center">
-          <Avatar image={user.user.avatar} />
+          <Link to={`/profile/${user.user._id}`}>
+            <Avatar image={user.user.avatar} />
+          </Link>
           <div className="d-flex flex-column m-2">
             <h6 className="m-0">{user.user.name}</h6>
             <strong>{user.user.email}</strong>
