@@ -1,5 +1,5 @@
 import React from "react";
-import {  ListGroup } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -20,7 +20,7 @@ const UsersDropdown = ({ show, userFind, hide }) => {
           <ListGroup.Item key={user._id} className="drp-user-item">
             <Link to={`/profile/${user._id}`} onClick={hide}>
               <div className="d-flex align-items-center">
-                <Avatar image={user.avatar} />
+                <Avatar image={user.avatar} userId={user._id} />
                 <div className="d-flex flex-column ">
                   <h6 className="m-0">{user.name}</h6>
                   <span>{user.email}</span>

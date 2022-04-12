@@ -14,7 +14,7 @@ const StartChattingAlert = ({ userLogin }) => {
         <div className="p-4 mt-4">
           <div className="d-flex justify-content-center mb-4">
             <Link to={`/profile/${userInfo._id}`}>
-              <Avatar image={userInfo.avatar} size="xl" />
+              <Avatar image={userInfo.avatar} size="xl" showOnline={false}/>
             </Link>
           </div>
           <div className="d-flex justify-content-center mb-2">

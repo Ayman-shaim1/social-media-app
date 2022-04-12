@@ -30,7 +30,7 @@ const AddComment = ({ postId, commentPost, postAddComment }) => {
         content: error,
       });
     }
-  }, [error]);
+  }, [error,showAlert]);
 
   return (
     <>

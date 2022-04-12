@@ -101,7 +101,7 @@ const MessagesConv = ({
       resetRemoveConvertation();
       closeConvertation();
     }
-    if (messages.length > 0) {
+    if (messages.length > 0 && user) {
       if (!isSeenAll) {
         setIsSeenAll(true);
         seenAllMessages(user._id);
@@ -119,7 +119,7 @@ const MessagesConv = ({
     dispatch,
     isSeenAll,
     resetRemoveConvertation,
-    user._id,
+    user,
     seenAllMessages,
     closeConvertation,
     showAlert,
@@ -133,11 +133,11 @@ const MessagesConv = ({
       <Card.Header className="conv-header">
         <div className="d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
-            <Link to={`/profile/${user._id}`}>
-              <Avatar image={user.avatar} size="md" />
+            <Link to={`/profile/${user && user._id}`}>
+              <Avatar image={user && user.avatar} size="md" userId={user && user._id} />
             </Link>
             <div className="d-flex flex-column">
-              <h6 className="m-0">{user.name}</h6>
+              <h6 className="m-0">{user && user.name}</h6>
               {/* <small>online</small> */}
             </div>
           </div>
@@ -146,7 +146,7 @@ const MessagesConv = ({
               size="sm"
               id="drp-conv-header-btn"></Dropdown.Toggle>
             <Dropdown.Menu>
-              <LinkContainer to={`/profile/${user._id}`}>
+              <LinkContainer to={`/profile/${user && user._id}`}>
                 <Dropdown.Item>
                   <i className="fa-solid fa-user "></i> show profile
                 </Dropdown.Item>

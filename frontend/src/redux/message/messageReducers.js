@@ -73,6 +73,22 @@ const messageGetConvertationUpdate = (state, payload) => {
             isConnectedUserSeend: true,
           },
         });
+      } else if (
+        String(state.convertations[i].user._id) ===
+        String(payload.message.message_from)
+      ) {
+        let nbr = 0;
+        if (!payload.message.isSeen) {
+          nbr = state.convertations[i].message.nbr + 1;
+        }
+        newConvertations.push({
+          user: state.convertations[i].user,
+          message: {
+            ...payload.message,
+            nbr: nbr,
+            isConnectedUserSeend: false,
+          },
+        });
       } else {
         newConvertations.push(state.convertations[i]);
       }
@@ -179,12 +195,14 @@ export const messageListReducer = (state = { messages: [] }, action) => {
     case MESSAGE_GET_LIST_UPDATE_PUSH:
       return {
         messages: [...state.messages, payload],
+        success: true,
       };
     case MESSAGE_GET_LIST_UPDATE_REMOVE:
       return {
         messages: state.messages.filter(
           (m) => String(m._id) !== String(payload)
         ),
+        success: true,
       };
     case MESSAGE_GET_LIST_UPDATE_SEEN_ALL:
       return {
@@ -192,6 +210,7 @@ export const messageListReducer = (state = { messages: [] }, action) => {
           message.isSeen = true;
           return message;
         }),
+        success: true,
       };
     case MESSAGE_GET_LIST_RESET:
       return { messages: [] };

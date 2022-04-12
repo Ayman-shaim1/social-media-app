@@ -7,6 +7,8 @@ import "./styles/index.css";
 import "./styles/utils.css";
 import "./styles/bootstrap.min.css";
 
+
+
 ReactDOM.render(
   <Provider store={store}>
     <App />

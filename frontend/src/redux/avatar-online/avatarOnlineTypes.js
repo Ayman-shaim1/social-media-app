@@ -1,0 +1,1 @@
+export const AVATAR_ONLINE_PUSH = "AVATAR_ONLINE_PUSH";

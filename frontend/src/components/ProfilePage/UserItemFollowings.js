@@ -227,7 +227,7 @@ const UserItemFollowing = ({
       <Card.Body>
         <div className="d-flex justify-content-between">
           <Link to={`/profile/${user._id}`}>
-            <Avatar image={user.avatar} />
+            <Avatar image={user.avatar} showOnline={false} />
           </Link>
           <div className="d-flex flex-column">
             <h6>{user.name}</h6>

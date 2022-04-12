@@ -44,14 +44,14 @@ const CommentItem = ({ comment, idPost }) => {
     if (success) {
       dispatch(resetDeleteCommentFromPost());
     }
-  }, [success, error, dispatch]);
+  }, [success, error, dispatch, showAlert]);
 
   return (
     <Card className="mb-2">
       <Card.Header bg="light" className="d-flex justify-content-between">
         <div className="d-flex align-items-center">
           <Link to={`/profile/${comment.user._id}`}>
-            <Avatar image={comment.user.avatar} />
+            <Avatar image={comment.user.avatar} userId={comment.user._id} />
           </Link>
           <Link to={`/profile/${comment.user._id}`}>
             <strong className="m-2">{comment.user.name}</strong>

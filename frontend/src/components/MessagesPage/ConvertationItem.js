@@ -128,7 +128,10 @@ const ConvertationItem = ({
       }`}
       onClick={openConvHandler}>
       <div>
-        <Avatar image={convertationData.user.avatar} />
+        <Avatar
+          image={convertationData.user.avatar}
+          userId={convertationData.user._id}
+        />
         <div className="d-flex flex-column convertation-item-inf">
           <strong>{convertationData.user.name}</strong>
           <p

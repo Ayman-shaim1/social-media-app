@@ -9,6 +9,7 @@ import {
   NOTIFICATION_GET_LIST_RESET,
   NOTIFICATION_GET_LIST_SEEN_UPDATE,
   NOTIFICATION_GET_LIST_DELETE_UPDATE,
+  NOTIFICATION_GET_LIST_UPDATE_PUSH,
   NOTIFICATION_DELETE_REQUEST,
   NOTIFICATION_DELETE_FAIL,
   NOTIFICATION_DELETE_RESET,
@@ -45,6 +46,10 @@ export const notificationListReducer = (
       return { loading: true, notifications: [] };
     case NOTIFICATION_GET_LIST_SUCCESS:
       return { loading: false, success: true, notifications: payload };
+    case NOTIFICATION_GET_LIST_UPDATE_PUSH:
+      return {
+        notifications: [payload, ...state.notifications],
+      };
     case NOTIFICATION_GET_LIST_SEEN_UPDATE:
       return {
         notifications: state.notifications.map((notification) => {

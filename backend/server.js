@@ -12,7 +12,11 @@ import messagesRoutes from "./routes/messagesRoutes.js";
 import notificationsRoutes from "./routes/notificationsRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 
+import { createServer } from "http";
+import { Server } from "socket.io";
+
 const app = express();
+const httpServer = createServer(app);
 // Init dotenv :
 dotenv.config();
 // Connect Database :
@@ -61,9 +65,26 @@ if (process.env.NODE_ENV === "production") {
 app.use(notFound);
 app.use(errorHandler);
 
+// Init socket io :
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
+
+io.on("connection", (socket) => {
+  socket.on("send-message", (obj) => {
+    io.emit("receive-message", obj);
+  });
+  socket.on("send-notification", (obj) => {
+    io.emit("receive-notification", obj);
+  });
+});
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
+httpServer.listen(
+  PORT,
   console.log(
-    `server running in ${process.env.NODE_ENV} on port ${PORT}`.yellow.bold
+    `Server running in ${process.env.NODE_ENV} on port ${PORT}`.yellow.bold
   )
 );

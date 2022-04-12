@@ -61,7 +61,7 @@ const RegisterPage = ({ register, userRegister, userLogin }) => {
     if (userInfo) {
       navigate("/home");
     }
-  }, [error,userInfo]);
+  }, [error,userInfo,navigate,showAlert]);
 
   return (
     <div className="mt-3">

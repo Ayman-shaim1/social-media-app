@@ -2,10 +2,26 @@
 .avatar-container {
   width: 40px;
   height: 40px;
+  position: relative;
+}
+.avatar-container .online {
+  position: absolute;
+  background-color: var(--bs-success);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  bottom: 3%;
+  right: 12%;
 }
 .avatar-container.avatar-sm {
   width: 25px;
   height: 25px;
+}
+.avatar-container.avatar-sm .online {
+  width: 5px;
+  height: 5px;
+  bottom: 3%;
+  right: 12%;
 }
 
 .avatar-container.avatar-md {
@@ -16,14 +32,28 @@
   width: 80px;
   height: 80px;
 }
+.avatar-container.avatar-lg .online {
+  width: 11px;
+  height: 11px;
+  bottom: 5%;
+  right: 15%;
+}
 .avatar-container.avatar-xl {
   width: 120px;
   height: 120px;
 }
+.avatar-container.avatar-xl .online {
+  width: 12px;
+  height: 12px;
+  bottom: 5%;
+  right: 15%;
+}
+
 .avatar {
   border-radius: 50%;
   border: 1px solid #fff;
   background-color: #f4f4f4;
+
 }
 /* End Avatar */
 
@@ -183,5 +213,3 @@
 }
 
 /* End Dialog */
-
-

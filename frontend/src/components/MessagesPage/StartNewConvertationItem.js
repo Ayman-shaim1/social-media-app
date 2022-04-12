@@ -34,7 +34,7 @@ const StartNewConvertationItem = ({
       className="start-new-conv-user-item"
       onClick={openConvHandler}>
       <div className="d-flex align-items-center">
-        <Avatar image={user.user.avatar} />
+        <Avatar image={user.user.avatar} userId={user.user._id} />
         <div className="d-flex flex-column">
           <h6 className="m-0">{user.user.name}</h6>
           <small>{user.user.email}</small>

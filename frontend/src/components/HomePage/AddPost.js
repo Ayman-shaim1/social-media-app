@@ -40,7 +40,7 @@ const AddPost = ({ createPost, postCreate, resetCreatePost }) => {
       setText("");
       resetCreatePost();
     }
-  }, [error, success, showAlert]);
+  }, [error, success, showAlert,resetCreatePost]);
 
   return (
     <Card className="mb-2">

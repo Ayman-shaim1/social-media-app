@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { ListGroup, Alert, Button } from "react-bootstrap";
+import { ListGroup,  Button } from "react-bootstrap";
 import {
   deleteNotification,
   resetDeleteNotification,

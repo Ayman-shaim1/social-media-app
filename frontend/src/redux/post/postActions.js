@@ -44,6 +44,8 @@ import { sendNotification } from "../notification/notificationActions";
 
 import axios from "axios";
 
+
+
 export const getPosts = () => {
   return async (dispatch, getState) => {
     try {
@@ -227,6 +229,7 @@ export const likePost = (id) => {
             `<a href="/profile/${userInfo._id}">${userInfo.name}</a> liked your <a href="/post/${id}">Post</a>`
           )
         );
+       
       }
     } catch (error) {
       const err =

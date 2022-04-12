@@ -35,6 +35,10 @@ import {
   MESSAGE_SEEN_ALL_RESET,
 } from "./messageTypes";
 import axios from "axios";
+import { io } from "socket.io-client";
+
+const SERVER = "http://localhost:5000";
+const socket = io(SERVER);
 
 export const getConvertations = () => {
   return async (dispatch, getState) => {
@@ -158,6 +162,19 @@ export const sendMessage = (
         objToSend,
         config
       );
+
+      const obj = {
+        senderUser: {
+          _id: userInfo._id,
+          name: userInfo.name,
+          avatar: userInfo.avatar,
+        },
+        receivedUserId: id,
+        message: data,
+      };
+
+      socket.emit("send-message", obj);
+
       dispatch({
         type: MESSAGE_SEND_SUCCESS,
         payload: data,

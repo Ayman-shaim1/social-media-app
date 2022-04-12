@@ -54,6 +54,7 @@ import {
 
 import convertationReducer from "./convertation/convertationReducer";
 import sharePostReducer from "./sharePost/sharePostReducer";
+import avatarOnlineReducer from "./avatar-online/avatarOnlineReducer";
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
@@ -108,6 +109,7 @@ const reducer = combineReducers({
 
   convertation: convertationReducer,
   sharePost: sharePostReducer,
+  avatarOnline: avatarOnlineReducer,
 });
 
 const store = createStore(

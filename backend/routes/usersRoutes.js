@@ -17,6 +17,10 @@ import {
   updatePassswordUser,
   updateAccountStateUser,
   checkFollowRequestUser,
+  LoginStateUser,
+  LogoutStateUser,
+  getLastConnctionUser,
+  getLoginStateUser,
 } from "../controllers/userController.js";
 import { protect } from "../middlewares/authMidlleware.js";
 
@@ -32,6 +36,11 @@ router.route("/followers/requests").get(protect, getFollowersRequestsUsers);
 router
   .route("/followers/requests/check/:id")
   .get(protect, checkFollowRequestUser);
+
+router.route("/login/:id").put(protect, LoginStateUser);
+router.route("/logout/:id").put(protect, LogoutStateUser);
+router.route("/loginstate/:id").get(protect, getLoginStateUser);
+router.route("/lastconnection/:id").get(protect, getLastConnctionUser);
 
 router.route("/:id").get(protect, getUser);
 router.route("/find/:arg").get(protect, findUsers);

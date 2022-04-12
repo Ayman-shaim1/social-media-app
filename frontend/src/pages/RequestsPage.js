@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import RequestItem from "../components/RequestsPage/RequestItem";
-import { Row, Col, Alert } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { connect } from "react-redux";
 import {
   getRequestsUsers,

@@ -351,7 +351,7 @@ const ProfilePage = ({
                   </div>
                 )}
                 <div className="d-flex justify-content-center">
-                  <Avatar image={user.avatar} size="xl" />
+                  <Avatar image={user.avatar} size="xl" showOnline={false} />
                 </div>
                 <div className="d-flex justify-content-center mt-2">
                   <h3>{user.name}</h3>
