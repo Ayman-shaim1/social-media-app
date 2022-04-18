@@ -8,9 +8,13 @@ import {
   seenAllMessages,
   getNotSeenCountMessages,
   deleteConvertationMessage,
+  getNotSeenMessages,
+  seenToastMessages,
 } from "../controllers/messageController.js";
 const router = express.Router();
 
+router.route("/notseen").get(protect, getNotSeenMessages);
+router.route("/toast/seen").put(protect, seenToastMessages);
 router.route("/").get(protect, getLastMessages);
 router
   .route("/:id")

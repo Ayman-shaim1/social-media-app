@@ -33,6 +33,14 @@ import {
   MESSAGE_SEEN_ALL_SUCCESS,
   MESSAGE_SEEN_ALL_FAIL,
   MESSAGE_SEEN_ALL_RESET,
+  MESSAGE_GET_NOTSEEN_FAIL,
+  MESSAGE_GET_NOTSEEN_REQUEST,
+  MESSAGE_GET_NOTSEEN_RESET,
+  MESSAGE_GET_NOTSEEN_SUCCESS,
+  MESSAGE_SEEN_TOAST_FAIL,
+  MESSAGE_SEEN_TOAST_REQUEST,
+  MESSAGE_SEEN_TOAST_RESET,
+  MESSAGE_SEEN_TOAST_SUCCESS,
 } from "./messageTypes";
 import axios from "axios";
 import { io } from "socket.io-client";
@@ -355,6 +363,72 @@ export const seenAllMessages = (id) => {
   };
 };
 
+export const getNotSeenMessages = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: MESSAGE_GET_NOTSEEN_REQUEST });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${userInfo.token} `,
+        },
+      };
+
+      const { data } = await axios.get("/api/messages/notseen", config);
+      dispatch({
+        type: MESSAGE_GET_NOTSEEN_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      const err =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({
+        type: MESSAGE_GET_NOTSEEN_FAIL,
+        payload: err,
+      });
+    }
+  };
+};
+
+export const seenToastMessages = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: MESSAGE_SEEN_TOAST_REQUEST });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${userInfo.token} `,
+        },
+      };
+
+      const { data } = await axios.put("/api/messages/toast/seen", {}, config);
+      dispatch({
+        type: MESSAGE_SEEN_TOAST_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      const err =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({
+        type: MESSAGE_SEEN_TOAST_FAIL,
+        payload: err,
+      });
+    }
+  };
+};
+
 export const resetGetConvertations = () => {
   return { type: MESSAGE_GET_CONVERTATIONS_RESET };
 };
@@ -381,4 +455,12 @@ export const resetDeleteMessage = () => {
 
 export const resetSeenAllMessages = () => {
   return { type: MESSAGE_SEEN_ALL_RESET };
+};
+
+export const resetGetNotSeenMessages = () => {
+  return { type: MESSAGE_GET_NOTSEEN_RESET };
+};
+
+export const resetSeenToastmessage = () => {
+  return { type: MESSAGE_SEEN_TOAST_RESET };
 };

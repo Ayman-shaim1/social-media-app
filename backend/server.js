@@ -15,6 +15,8 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 
+import { setLoginState, setLogoutState } from "./services/loginStateService.js";
+
 const app = express();
 const httpServer = createServer(app);
 // Init dotenv :
@@ -73,11 +75,36 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
+  socket.on("user-connect", (id) => {
+    socket.userId = id;
+    setLoginState(id);
+    io.emit("client-user-connect", id);
+  });
+
+  socket.on("user-disconnect", (id) => {
+    setLogoutState(socket.userId);
+    io.emit("client-user-disconnect", id);
+  });
+
+  socket.on("disconnect", () => {
+    setLogoutState(socket.userId);
+    io.emit("client-user-disconnect", socket.userId);
+  });
+
   socket.on("send-message", (obj) => {
     io.emit("receive-message", obj);
   });
+
   socket.on("send-notification", (obj) => {
     io.emit("receive-notification", obj);
+  });
+
+  socket.on("user-typing", (obj) => {
+    io.emit("client-user-typing", obj);
+  });
+
+  socket.on("user-stop-typing", (obj) => {
+    io.emit("client-user-stop-typing", obj);
   });
 });
 

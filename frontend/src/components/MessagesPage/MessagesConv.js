@@ -15,7 +15,7 @@ import {
   seenAllMessages,
   resetSendMessage,
   resetRemoveConvertation,
-  resetGetMessages,
+
 } from "../../redux/message/messageActions";
 
 import {
@@ -43,7 +43,7 @@ const MessagesConv = ({
 
   resetSendMessage,
   resetRemoveConvertation,
-  resetGetMessages,
+
 }) => {
   const dispatch = useDispatch();
   // hooks :
@@ -134,7 +134,12 @@ const MessagesConv = ({
         <div className="d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
             <Link to={`/profile/${user && user._id}`}>
-              <Avatar image={user && user.avatar} size="md" userId={user && user._id} />
+              <Avatar
+                image={user && user.avatar}
+                size="md"
+                userId={user && user._id}
+                isOnline={user && user.isOnline}
+              />
             </Link>
             <div className="d-flex flex-column">
               <h6 className="m-0">{user && user.name}</h6>
@@ -219,7 +224,7 @@ const mapDispatchToProps = (dispatch) => {
 
     resetRemoveConvertation: () => dispatch(resetRemoveConvertation()),
     resetSendMessage: () => dispatch(resetSendMessage()),
-    resetGetMessages: () => dispatch(resetGetMessages()),
+    
   };
 };
 

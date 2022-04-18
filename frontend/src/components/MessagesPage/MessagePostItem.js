@@ -55,6 +55,7 @@ const MessagePostItem = ({
                 <Avatar
                   image={message.message_post.user.avatar}
                   userId={message.message_post.user._id}
+                  isOnline={message.message_post.user.isOnline}
                 />
               </Link>
               <Link to={`/profile/${message.message_post.user._id}`}>

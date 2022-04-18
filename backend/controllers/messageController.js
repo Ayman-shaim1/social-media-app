@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Message from "../models/messageModel.js";
 import User from "../models/userModel.js";
+import mongoose from "mongoose";
 
 // @desc    Send message
 // @route   POST /api/messages/:id
@@ -196,6 +197,8 @@ export const getLastMessages = asyncHandler(async (req, res) => {
               _id: messages[i].message_from._id,
               name: messages[i].message_from.name,
               avatar: messages[i].message_from.avatar,
+              isOnline: messages[i].message_from.isOnline,
+              isTyping: false,
             },
             message: {
               _id: messages[i]._id,
@@ -230,6 +233,8 @@ export const getLastMessages = asyncHandler(async (req, res) => {
               _id: messages[i].message_to._id,
               name: messages[i].message_to.name,
               avatar: messages[i].message_to.avatar,
+              isOnline: messages[i].message_to.isOnline,
+              isTyping: false,
             },
             message: {
               _id: messages[i]._id,
@@ -312,4 +317,45 @@ export const seenAllMessages = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found !");
   }
+});
+
+// @desc    Get not seen messages
+// @route   GET /api/messages/notseen
+// @access  Private
+export const getNotSeenMessages = asyncHandler(async (req, res) => {
+  const messages = await Message.find({
+    $and: [
+      { message_to: mongoose.Types.ObjectId(req.user.id) },
+      { isSeen: false },
+      { isSeen_Toast: false },
+    ],
+  }).populate("message_from");
+  messages.sort((a, b) => {
+    return b.message_date - a.message_date;
+  });
+  res.json(messages);
+});
+
+// @desc    Seen Toast Message
+// @route   PUT /api/messages/toast/seen/
+// @access  Private
+export const seenToastMessages = asyncHandler(async (req, res) => {
+  await Message.updateMany(
+    {
+      $and: [
+        { message_to: mongoose.Types.ObjectId(req.user.id) },
+        { isSeen: false },
+        { isSeen_Toast: false },
+      ],
+    },
+    {
+      $set: {
+        isSeen_Toast: true,
+      },
+    }
+  );
+
+  res.json({
+    message: "done !",
+  });
 });

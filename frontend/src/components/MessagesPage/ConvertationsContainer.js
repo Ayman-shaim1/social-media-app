@@ -17,9 +17,11 @@ const ConvertationsContainer = ({
 }) => {
   // hooks :
   const showAlert = useAlert();
-  // states:
+
+  // states :
   const [isCallApi, setIsCallApi] = useState(false);
   const [search, setSearch] = useState("");
+
   // redux states :
   const { loading, error, convertations } = messageGetConvertations;
 
@@ -37,6 +39,7 @@ const ConvertationsContainer = ({
       });
       resetGetConvertations();
     }
+    
   }, [
     error,
     isCallApi,

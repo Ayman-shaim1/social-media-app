@@ -35,6 +35,17 @@ import {
   MESSAGE_SEEN_ALL_REQUEST,
   MESSAGE_SEEN_ALL_RESET,
   MESSAGE_SEEN_ALL_SUCCESS,
+  MESSAGE_GET_NOTSEEN_FAIL,
+  MESSAGE_GET_NOTSEEN_REQUEST,
+  MESSAGE_GET_NOTSEEN_RESET,
+  MESSAGE_GET_NOTSEEN_SUCCESS,
+  MESSAGE_GET_NOTSEEN_UPDATE_PUSH,
+  MESSAGE_SEEN_TOAST_FAIL,
+  MESSAGE_SEEN_TOAST_REQUEST,
+  MESSAGE_SEEN_TOAST_RESET,
+  MESSAGE_SEEN_TOAST_SUCCESS,
+  MESSAGE_GET_CONVERTATIONS_UPDATE_USER_TYPING,
+  MESSAGE_GET_CONVERTATIONS_UPDATE_USER_STOP_TYPING,
 } from "./messageTypes";
 
 export const messageGetNotSeenReducer = (state = {}, action) => {
@@ -58,6 +69,7 @@ export const messageGetNotSeenReducer = (state = {}, action) => {
 // change state functions :
 const messageGetConvertationUpdate = (state, payload) => {
   let newConvertations = [];
+  console.log(payload);
 
   if (payload.isConvExiste) {
     for (let i = 0; i < state.convertations.length; i++) {
@@ -81,6 +93,7 @@ const messageGetConvertationUpdate = (state, payload) => {
         if (!payload.message.isSeen) {
           nbr = state.convertations[i].message.nbr + 1;
         }
+
         newConvertations.push({
           user: state.convertations[i].user,
           message: {
@@ -103,6 +116,9 @@ const messageGetConvertationUpdate = (state, payload) => {
   newConvertations.sort((a, b) => {
     return new Date(b.message.message_date) - new Date(a.message.message_date);
   });
+
+  console.log(newConvertations);
+
   return newConvertations;
 };
 
@@ -164,6 +180,7 @@ export const messageGetConvertationsReducer = (
       };
     case MESSAGE_GET_CONVERTATIONS_UPDATE_SEEN_ALL:
       return {
+        success: true,
         convertations: state.convertations.map((convertation) => {
           if (String(convertation.user._id) === String(payload)) {
             convertation.message.isSeen = true;
@@ -171,7 +188,26 @@ export const messageGetConvertationsReducer = (
           }
           return convertation;
         }),
+      };
+    case MESSAGE_GET_CONVERTATIONS_UPDATE_USER_TYPING:
+      return {
         success: true,
+        convertations: state.convertations.map((convertation) => {
+          if (String(convertation.user._id) === String(payload)) {
+            convertation.user.isTyping = true;
+          }
+          return convertation;
+        }),
+      };
+    case MESSAGE_GET_CONVERTATIONS_UPDATE_USER_STOP_TYPING:
+      return {
+        success: true,
+        convertations: state.convertations.map((convertation) => {
+          if (String(convertation.user._id) === String(payload)) {
+            convertation.user.isTyping = false;
+          }
+          return convertation;
+        }),
       };
     case MESSAGE_GET_CONVERTATIONS_FAIL:
       return { convertations: [], error: payload };
@@ -277,6 +313,43 @@ export const messageSeenAllReducer = (state = {}, action) => {
     case MESSAGE_SEEN_ALL_FAIL:
       return { error: payload };
     case MESSAGE_SEEN_ALL_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const messageGetNotSeenListReducer = (
+  state = { messages: [] },
+  action
+) => {
+  const { type, payload } = action;
+  switch (type) {
+    case MESSAGE_GET_NOTSEEN_REQUEST:
+      return { loading: true, messages: [] };
+    case MESSAGE_GET_NOTSEEN_SUCCESS:
+      return { messages: payload };
+    case MESSAGE_GET_NOTSEEN_FAIL:
+      return { messages: [], error: payload };
+    case MESSAGE_GET_NOTSEEN_UPDATE_PUSH:
+      return { messages: [payload, ...state.messages] };
+    case MESSAGE_GET_NOTSEEN_RESET:
+      return { messages: [] };
+    default:
+      return state;
+  }
+};
+
+export const messageSeenToastReducer = (state = {}, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case MESSAGE_SEEN_TOAST_REQUEST:
+      return { loading: true };
+    case MESSAGE_SEEN_TOAST_SUCCESS:
+      return { success: true, message: payload };
+    case MESSAGE_SEEN_TOAST_FAIL:
+      return { error: payload };
+    case MESSAGE_SEEN_TOAST_RESET:
       return {};
     default:
       return state;

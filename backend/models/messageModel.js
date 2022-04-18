@@ -29,6 +29,11 @@ const messageSchema = Schema({
     required: true,
     default: false,
   },
+  isSeen_Toast: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   delete_users: [
     {
       user: {

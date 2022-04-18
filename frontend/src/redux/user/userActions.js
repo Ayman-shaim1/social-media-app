@@ -70,6 +70,11 @@ import { sendNotification } from "../notification/notificationActions";
 
 import axios from "axios";
 
+import { io } from "socket.io-client";
+
+const SERVER = "http://localhost:5000";
+const socket = io(SERVER);
+
 export const login = (email, password) => {
   return (dispatch) => {
     dispatch({ type: USER_LOGIN_REQUEST });
@@ -82,6 +87,7 @@ export const login = (email, password) => {
         const data = response.data;
         dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
         localStorage.setItem("userInfo", JSON.stringify(data));
+       
       })
       .catch((error) => {
         const err =
@@ -95,7 +101,12 @@ export const login = (email, password) => {
 };
 
 export const logout = () => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    socket.emit("user-disconnect", userInfo._id);
+    // setLoginState(false);
     localStorage.removeItem("userInfo");
     dispatch({ type: USER_LOGOUT });
     dispatch({ type: POST_LIST_RESET });
@@ -140,6 +151,7 @@ export const register = (name, email, avatar, password) => {
             `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet, autem eligendi! Tenetur excepturi quis enim doloribus repellat culpa facere ea?`
           )
         );
+        
       } else {
         const { data } = await axios.post(
           "/api/users",

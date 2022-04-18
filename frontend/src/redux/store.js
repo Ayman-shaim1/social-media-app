@@ -50,6 +50,8 @@ import {
   messageRemoveConvertationReducer,
   messageDeleteReducer,
   messageSeenAllReducer,
+  messageGetNotSeenListReducer,
+  messageSeenToastReducer,
 } from "./message/messageReducers";
 
 import convertationReducer from "./convertation/convertationReducer";
@@ -106,6 +108,8 @@ const reducer = combineReducers({
   messageRemoveConvertation: messageRemoveConvertationReducer,
   messageDelete: messageDeleteReducer,
   messageSeenAll: messageSeenAllReducer,
+  messageGetNotSeenList: messageGetNotSeenListReducer,
+  messageSeenToast: messageSeenToastReducer,
 
   convertation: convertationReducer,
   sharePost: sharePostReducer,

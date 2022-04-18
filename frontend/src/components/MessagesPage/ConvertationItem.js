@@ -16,12 +16,9 @@ const ConvertationItem = ({
   convertation: convertationData,
   messageList,
   messageRemoveConvertation,
-
   openConvertation,
   getMessages,
   removeConvertation,
-
-  resetGetConvertations,
   resetRemoveConvertation,
 }) => {
   // hooks :
@@ -37,8 +34,8 @@ const ConvertationItem = ({
   } = messageRemoveConvertation;
 
   const cutMessageHandler = (message_text) => {
-    if (String(message_text).length >= 45) {
-      return String(message_text).slice(0, 45) + "...";
+    if (String(message_text).length >= 22) {
+      return String(message_text).slice(0, 22) + "...";
     } else {
       return String(message_text);
     }
@@ -131,6 +128,7 @@ const ConvertationItem = ({
         <Avatar
           image={convertationData.user.avatar}
           userId={convertationData.user._id}
+          isOnline={convertationData.user.isOnline}
         />
         <div className="d-flex flex-column convertation-item-inf">
           <strong>{convertationData.user.name}</strong>
@@ -141,13 +139,17 @@ const ConvertationItem = ({
                 ? "not-seen-message"
                 : ""
             }>
-            {convertationData.message.isConnectedUserSeend && (
-              <span className="me">Me :</span>
+            {!convertationData.user.isTyping &&
+              convertationData.message.isConnectedUserSeend && (
+                <span className="me">Me :</span>
+              )}
+            {convertationData.user.isTyping ? (
+              <strong className="typing">typing ...</strong>
+            ) : convertationData.message.message_text !== null ? (
+              cutMessageHandler(convertationData.message.message_text)
+            ) : (
+              "sent a post"
             )}
-
-            {convertationData.message.message_text !== null
-              ? cutMessageHandler(convertationData.message.message_text)
-              : "sent a post"}
           </p>
         </div>
         <div className="d-flex flex-column convertation-item-inf-lss">

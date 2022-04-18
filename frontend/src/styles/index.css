@@ -265,15 +265,20 @@ textarea {
 .convertation-item > div {
   display: flex;
   align-items: center;
+  position: relative;
 }
 .convertation-item .avatar-container {
-  width: 50px;
-  height: 50px;
   margin-right: 30px;
 }
 
 .convertation-item .convertation-item-inf {
-  width: 300px;
+  margin-right: 10px;
+  width: 48%;
+}
+.convertation-item .convertation-item-inf .typing {
+  color: var(--bs-success);
+  font-weight: bold;
+  font-size: 12px;
 }
 .convertation-item .convertation-item-inf p {
   font-size: 13px;
@@ -284,9 +289,6 @@ textarea {
   font-size: 14px;
 }
 
-.convertation-item div .convertation-item-inf-lss {
-  width: 80px;
-}
 .convertation-item div .convertation-item-inf-lss .badge {
   width: 20px;
 }
@@ -295,6 +297,8 @@ textarea {
 }
 .convertation-item div .dropdown {
   visibility: hidden;
+  position: absolute;
+  right: 0%;
 }
 .convertation-item div .dropdown .btn {
   background: transparent !important;
@@ -448,3 +452,11 @@ textarea {
 }
 
 /* End post Video */
+/* Begin Messages Toast */
+.messages-toast-container {
+  position: absolute;
+  z-index: 800;
+  top: 2%;
+  right: 2%;
+}
+/* End Messages Toast */

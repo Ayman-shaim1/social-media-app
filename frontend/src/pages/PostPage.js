@@ -206,7 +206,11 @@ const PostPage = ({
                     className="d-flex justify-content-between">
                     <div className="d-flex align-items-center">
                       <Link to={`/profile/${post.user._id}`}>
-                        <Avatar image={post.user.avatar}  userId={post.user._id}/>
+                        <Avatar
+                          image={post.user.avatar}
+                          userId={post.user._id}
+                          isOnline={post.user.isOnline}
+                        />
                       </Link>
                       <Link to={`/profile/${post.user._id}`}>
                         <strong className="m-2">{post.user.name}</strong>

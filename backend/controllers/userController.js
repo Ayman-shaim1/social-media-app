@@ -499,60 +499,8 @@ export const getFollowingUsers = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get following user list
-// @route   PUT /api/users/login/:id
-// @access  Private
-export const LoginStateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-  if (user) {
-    user.isOnline = true;
-    user.lastConnection = null;
-    await user.save();
-    res.json({ message: "done !" });
-  } else {
-    res.status(404);
-    throw new Error("user not found");
-  }
-});
 
-// @desc    Get following user list
-// @route   PUT /api/users/logout/:id
-// @access  Private
-export const LogoutStateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-  if (user) {
-    user.isOnline = false;
-    user.lastConnection = Date.now;
-    await user.save();
-    res.json({ message: "done !" });
-  } else {
-    res.status(404);
-    throw new Error("user not found");
-  }
-});
 
-// @desc    Get following user list
-// @route   GET /api/users/loginstate/:id
-// @access  Private
-export const getLoginStateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-  if (user) {
-    res.json(user.isOnline);
-  } else {
-    res.status(404);
-    throw new Error("user not found");
-  }
-});
 
-// @desc    Get following user list
-// @route   GET /api/users/lastconnection/:id
-// @access  Private
-export const getLastConnctionUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-  if (user) {
-    res.json(user.lastConnection);
-  } else {
-    res.status(404);
-    throw new Error("user not found");
-  }
-});
+
+
