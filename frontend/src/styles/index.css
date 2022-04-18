@@ -320,6 +320,12 @@ textarea {
 .conv-header .avatar-container {
   margin-right: 20px;
 }
+.conv-header .irf-conv-header-ss-info {
+  margin-top: 3px;
+  font-size: 10px;
+  font-weight: bold;
+  color: gray;
+}
 .conv-header #drp-conv-header-btn {
   background-color: #f7f7f7 !important;
   color: #000;

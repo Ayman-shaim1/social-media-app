@@ -15,7 +15,6 @@ import {
   seenAllMessages,
   resetSendMessage,
   resetRemoveConvertation,
-
 } from "../../redux/message/messageActions";
 
 import {
@@ -26,9 +25,12 @@ import {
 import { Link } from "react-router-dom";
 
 import { closeConvertation } from "../../redux/convertation/convertationActions";
+import { CONVERTATION_UPDATE_SET_DATE_DIFF_INC } from "../../redux/convertation/convertationTypes";
 
 import useDialog from "../../hooks/useDialog";
 import useAlert from "../../hooks/useAlert";
+import useDiffDate from "../../hooks/useDiffDate";
+let interval = null;
 
 const MessagesConv = ({
   convertation,
@@ -43,16 +45,17 @@ const MessagesConv = ({
 
   resetSendMessage,
   resetRemoveConvertation,
-
 }) => {
-  const dispatch = useDispatch();
   // hooks :
+  const dispatch = useDispatch();
   const showDialog = useDialog();
   const showAlert = useAlert();
+  const getDiff = useDiffDate();
 
   // states :
   const [text, setText] = useState("");
   const [isSeenAll, setIsSeenAll] = useState(false);
+  const [incSec, setIncSen] = useState(false);
 
   // redux states :
   const { messages, loading: messageListLoading } = messageList;
@@ -88,6 +91,7 @@ const MessagesConv = ({
   };
 
   useEffect(() => {
+    console.log("Hello convertation");
     convBodyRef.current.scrollTo(0, convBodyRef.current.scrollHeight * 100000);
     if (messageRemoveConvertationError) {
       showAlert({
@@ -115,8 +119,25 @@ const MessagesConv = ({
         });
       }
     }
+
+    if (!user.isOnline) {
+      if (!incSec) {
+        setIncSen(true);
+        console.log("user offline");
+        interval = setInterval(() => {
+          dispatch({
+            type: CONVERTATION_UPDATE_SET_DATE_DIFF_INC,
+          });
+        }, 5000);
+      }
+    } else {
+      clearInterval(interval);
+      setIncSen(false);
+      console.log("user online");
+    }
   }, [
     dispatch,
+    incSec,
     isSeenAll,
     resetRemoveConvertation,
     user,
@@ -143,7 +164,15 @@ const MessagesConv = ({
             </Link>
             <div className="d-flex flex-column">
               <h6 className="m-0">{user && user.name}</h6>
-              {/* <small>online</small> */}
+
+              {user && user.isOnline && (
+                <small className="irf-conv-header-ss-info">online</small>
+              )}
+              {user && user.lastConnection && (
+                <small className="irf-conv-header-ss-info">
+                  online {getDiff(user.lastConnection)}
+                </small>
+              )}
             </div>
           </div>
           <Dropdown>
@@ -224,7 +253,6 @@ const mapDispatchToProps = (dispatch) => {
 
     resetRemoveConvertation: () => dispatch(resetRemoveConvertation()),
     resetSendMessage: () => dispatch(resetSendMessage()),
-    
   };
 };
 

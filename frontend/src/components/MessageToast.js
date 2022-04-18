@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Toast } from "react-bootstrap";
+import useDiffDate from "../hooks/useDiffDate";
 const MessageToast = ({ message }) => {
+  // hooks :
+  const getDiff = useDiffDate();
   const [show, setShow] = useState(true);
   const hideToastHandler = () => setShow(false);
   useEffect(() => {
@@ -10,7 +13,10 @@ const MessageToast = ({ message }) => {
     <Toast show={show} onClose={hideToastHandler}>
       <Toast.Header className="d-flex justify-content-between">
         <small className="text-muted">
-          {new Date(message.message_date).toDateString()}
+          sent{" "}
+          {getDiff(message.message_date) === "0 secondes ago"
+            ? "just now"
+            : getDiff(message.message_date)}
         </small>
       </Toast.Header>
       <Toast.Body>

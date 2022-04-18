@@ -69,6 +69,7 @@ export const messageGetNotSeenReducer = (state = {}, action) => {
 // change state functions :
 const messageGetConvertationUpdate = (state, payload) => {
   let newConvertations = [];
+  payload.message.isTyping = false;
   console.log(payload);
 
   if (payload.isConvExiste) {
@@ -87,7 +88,7 @@ const messageGetConvertationUpdate = (state, payload) => {
         });
       } else if (
         String(state.convertations[i].user._id) ===
-        String(payload.message.message_from)
+        String(payload.message.message_from._id)
       ) {
         let nbr = 0;
         if (!payload.message.isSeen) {

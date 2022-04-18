@@ -199,6 +199,7 @@ export const getLastMessages = asyncHandler(async (req, res) => {
               avatar: messages[i].message_from.avatar,
               isOnline: messages[i].message_from.isOnline,
               isTyping: false,
+              lastConnection: messages[i].message_from.lastConnection,
             },
             message: {
               _id: messages[i]._id,
@@ -235,6 +236,7 @@ export const getLastMessages = asyncHandler(async (req, res) => {
               avatar: messages[i].message_to.avatar,
               isOnline: messages[i].message_to.isOnline,
               isTyping: false,
+              lastConnection: messages[i].message_to.lastConnection,
             },
             message: {
               _id: messages[i]._id,

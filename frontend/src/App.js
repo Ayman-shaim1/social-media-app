@@ -21,7 +21,8 @@ import SettingsPage from "./pages/SettingsPage";
 import FindFriendsPage from "./pages/FindFriendsPage";
 import RequestsPage from "./pages/RequestsPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import { io } from "socket.io-client";
+
+import { seenToastMessages } from "./redux/message/messageActions";
 
 import {
   MESSAGE_GET_LIST_UPDATE_PUSH,
@@ -36,12 +37,20 @@ import {
   AVATAR_ONLINE_LOGOUT_UPDATE,
 } from "./redux/avatar-online/avatarOnlineTypes";
 
+import {
+  CONVERTATION_UPDATE_SET_ONLINE,
+  CONVERTATION_UPDATE_SET_OFFLINE,
+} from "./redux/convertation/convertationTypes";
+
+import { io } from "socket.io-client";
+
 const SERVER = "http://localhost:5000";
 const socket = io(SERVER);
 
 const App = ({
   userLogin,
   convertation,
+  seenToastMessages,
   messageGetConvertations,
   messageGetNotSeen,
   avatarOnline,
@@ -63,6 +72,7 @@ const App = ({
       if (!isConnect) {
         socket.emit("user-connect", userInfo._id);
         setIsConnect(true);
+        seenToastMessages();
       }
     }
 
@@ -76,7 +86,8 @@ const App = ({
 
       if (String(userInfo._id) === String(receivedUserId)) {
         message.message_from = senderUser;
-        
+        seenToastMessages();
+        seenToastMessages();
         dispatch({
           type: MESSAGE_GET_NOTSEEN_UPDATE_PUSH,
           payload: message,
@@ -145,6 +156,12 @@ const App = ({
 
     socket.on("client-user-connect", (id) => {
       if (id !== null && String(userInfo._id) !== String(id)) {
+        if (userConvertation && String(userConvertation._id) === String(id)) {
+          dispatch({
+            type: CONVERTATION_UPDATE_SET_ONLINE,
+          });
+        }
+
         dispatch({
           type: AVATAR_ONLINE_LOGIN_UPDATE,
           payload: id,
@@ -154,6 +171,11 @@ const App = ({
 
     socket.on("client-user-disconnect", (id) => {
       if (id !== null && String(userInfo._id) !== String(id)) {
+        if (userConvertation && String(userConvertation._id) === String(id)) {
+          dispatch({
+            type: CONVERTATION_UPDATE_SET_OFFLINE,
+          });
+        }
         dispatch({
           type: AVATAR_ONLINE_LOGOUT_UPDATE,
           payload: id,
@@ -162,6 +184,7 @@ const App = ({
     });
   }, [
     isConnect,
+    seenToastMessages,
     isOpen,
     userConvertation,
     nbr,
@@ -326,4 +349,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(App);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    seenToastMessages: () => dispatch(seenToastMessages()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
