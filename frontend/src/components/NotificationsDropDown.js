@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { ListGroup,  Button } from "react-bootstrap";
+import { ListGroup, Button } from "react-bootstrap";
 import {
   deleteNotification,
   resetDeleteNotification,
 } from "../redux/notification/notificationActions";
 import { connect } from "react-redux";
 import useAlert from "../hooks/useAlert";
+import useDiffDate from "../hooks/useDiffDate";
 
 const NotificationsDropDown = ({
   notificationList,
@@ -15,6 +16,7 @@ const NotificationsDropDown = ({
 }) => {
   // hooks :
   const showAlert = useAlert();
+  const getDiff = useDiffDate();
 
   // redux states:
   const { notifications } = notificationList;
@@ -51,7 +53,7 @@ const NotificationsDropDown = ({
             key={notification.notification._id}
             active={!notification.notification.isSeen ? true : false}>
             <div className="d-flex align-items-center justify-content-between drp-notifications-item-header">
-              <h6 className="mt-2">{notification.notification.title}</h6>
+              <h6 className="mb-0">{notification.notification.title}</h6>
               <Button
                 size="sm"
                 variant={notification.notification.isSeen ? "light" : "primary"}
@@ -62,6 +64,9 @@ const NotificationsDropDown = ({
                 }>
                 <i className="fas fa-trash"></i>
               </Button>
+            </div>
+            <div className="mb-3  ">
+              <small>sent {getDiff(notification.notification.date)}</small>
             </div>
             <small
               dangerouslySetInnerHTML={{
