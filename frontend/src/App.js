@@ -44,11 +44,10 @@ import {
 
 import { io } from "socket.io-client";
 
-const SERVER = "http://localhost:5000";
+const SERVER = "http://socialmedia01.herokuapp.com";
 const socket = io(SERVER);
 
 console.log(process.env.APP_URL);
-
 
 const App = ({
   userLogin,
