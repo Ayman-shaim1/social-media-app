@@ -30,6 +30,7 @@ import { CONVERTATION_UPDATE_SET_DATE_DIFF_INC } from "../../redux/convertation/
 import useDialog from "../../hooks/useDialog";
 import useAlert from "../../hooks/useAlert";
 import useDiffDate from "../../hooks/useDiffDate";
+
 let interval = null;
 
 const MessagesConv = ({
@@ -123,17 +124,16 @@ const MessagesConv = ({
     if (!user.isOnline) {
       if (!incSec) {
         setIncSen(true);
-        console.log("user offline");
+
         interval = setInterval(() => {
           dispatch({
             type: CONVERTATION_UPDATE_SET_DATE_DIFF_INC,
           });
-        }, 5000);
+        }, 10000);
       }
     } else {
       clearInterval(interval);
       setIncSen(false);
-      console.log("user online");
     }
   }, [
     dispatch,
