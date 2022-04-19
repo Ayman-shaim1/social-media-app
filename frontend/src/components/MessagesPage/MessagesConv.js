@@ -112,7 +112,6 @@ const MessagesConv = ({
   useEffect(() => {
     convBodyRef.current.scrollTo(0, convBodyRef.current.scrollHeight * 100000);
     if (messageRemoveConvertationError) {
-      
       showAlert({
         type: "danger",
         title: "error",
@@ -183,12 +182,17 @@ const MessagesConv = ({
             <div className="d-flex flex-column">
               <h6 className="m-0">{user && user.name}</h6>
 
-              {user && user.isOnline && (
+              {user && user.isOnline && !user.isTyping && (
                 <small className="irf-conv-header-ss-info">online</small>
               )}
-              {user && user.lastConnection && (
+              {user && user.lastConnection && !user.isTyping && (
                 <small className="irf-conv-header-ss-info">
                   online {getDiff(user.lastConnection)}
+                </small>
+              )}
+              {user && user.isTyping && (
+                <small className="irf-conv-header-ss-info typing">
+                  typing ...
                 </small>
               )}
             </div>

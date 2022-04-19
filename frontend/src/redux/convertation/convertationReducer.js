@@ -4,6 +4,8 @@ import {
   CONVERTATION_UPDATE_SET_OFFLINE,
   CONVERTATION_UPDATE_SET_ONLINE,
   CONVERTATION_UPDATE_SET_DATE_DIFF_INC,
+  CONVERTATION_UPDATE_USER_STOP_TYPING,
+  CONVERTATION_UPDATE_USER_TYPING,
 } from "./convertationTypes";
 
 const convertationReducer = (state = { isOpen: false }, action) => {
@@ -34,8 +36,25 @@ const convertationReducer = (state = { isOpen: false }, action) => {
           lastConnection: new Date(state.user.lastConnection),
         },
       };
+    case CONVERTATION_UPDATE_USER_TYPING:
+      return {
+        isOpen: true,
+        user: {
+          ...state.user,
+          isTyping: true,
+        },
+      };
+    case CONVERTATION_UPDATE_USER_STOP_TYPING:
+      return {
+        isOpen: true,
+        user: {
+          ...state.user,
+          isTyping: false,
+        },
+      };
     case CONVERTATION_CLOSE:
       return { isOpen: false };
+
     default:
       return state;
   }

@@ -326,6 +326,9 @@ textarea {
   font-weight: bold;
   color: gray;
 }
+.conv-header .irf-conv-header-ss-info.typing {
+  color: var(--bs-success);
+}
 .conv-header #drp-conv-header-btn {
   background-color: #f7f7f7 !important;
   color: #000;

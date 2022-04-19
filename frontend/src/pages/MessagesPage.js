@@ -21,6 +21,11 @@ import {
   MESSAGE_GET_CONVERTATIONS_UPDATE_USER_STOP_TYPING,
 } from "../redux/message/messageTypes";
 
+import {
+  CONVERTATION_UPDATE_USER_TYPING,
+  CONVERTATION_UPDATE_USER_STOP_TYPING,
+} from "../redux/convertation/convertationTypes";
+
 import socket from "../socket";
 
 const MessagesPage = ({
@@ -36,7 +41,7 @@ const MessagesPage = ({
   const [isFirstCall, setIsFirstCall] = useState(false);
 
   // redux states:
-  const { isOpen } = convertation;
+  const { isOpen, user: userConvertation } = convertation;
   const { userInfo } = userLogin;
 
   const showConvHandler = () => {
@@ -58,7 +63,11 @@ const MessagesPage = ({
       const { senderUserId, receivedUserId } = obj;
 
       if (String(userInfo._id) === String(receivedUserId)) {
-        console.log(`user ${senderUserId} is typing ...`);
+        if (isOpen && String(userConvertation._id) === String(senderUserId)) {
+          dispatch({
+            type: CONVERTATION_UPDATE_USER_TYPING,
+          });
+        }
         dispatch({
           type: MESSAGE_GET_CONVERTATIONS_UPDATE_USER_TYPING,
           payload: senderUserId,
@@ -70,14 +79,27 @@ const MessagesPage = ({
       const { senderUserId, receivedUserId } = obj;
 
       if (String(userInfo._id) === String(receivedUserId)) {
-        console.log(`user ${senderUserId} stop typing ...`);
+        if (isOpen && String(userConvertation._id) === String(senderUserId)) {
+          dispatch({
+            type: CONVERTATION_UPDATE_USER_STOP_TYPING,
+          });
+        }
+
         dispatch({
           type: MESSAGE_GET_CONVERTATIONS_UPDATE_USER_STOP_TYPING,
           payload: senderUserId,
         });
       }
     });
-  }, [userInfo, isFirstCall, resetGetMessages, closeConvertation, dispatch]);
+  }, [
+    userInfo,
+    isOpen,
+    userConvertation,
+    isFirstCall,
+    resetGetMessages,
+    closeConvertation,
+    dispatch,
+  ]);
 
   return (
     <Row>
