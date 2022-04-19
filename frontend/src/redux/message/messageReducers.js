@@ -197,6 +197,7 @@ export const messageGetConvertationsReducer = (
           if (String(convertation.user._id) === String(payload)) {
             convertation.user.isTyping = true;
           }
+
           return convertation;
         }),
       };

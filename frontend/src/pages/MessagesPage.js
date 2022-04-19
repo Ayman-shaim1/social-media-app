@@ -10,22 +10,33 @@ import {
 import ConvertationsContainer from "../components/MessagesPage/ConvertationsContainer";
 import MessagesConv from "../components/MessagesPage/MessagesConv";
 import StartChattingAlert from "../components/MessagesPage/StartChattingAlert";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 
 import StartNewConvertationContainer from "../components/MessagesPage/StartNewConvertationContainer";
 import { closeConvertation } from "../redux/convertation/convertationActions";
 import { resetGetMessages } from "../redux/message/messageActions";
 
+import {
+  MESSAGE_GET_CONVERTATIONS_UPDATE_USER_TYPING,
+  MESSAGE_GET_CONVERTATIONS_UPDATE_USER_STOP_TYPING,
+} from "../redux/message/messageTypes";
+
+import socket from "../socket";
+
 const MessagesPage = ({
   convertation,
   resetGetMessages,
   closeConvertation,
+  userLogin,
 }) => {
+  // hooks :
+  const dispatch = useDispatch();
   // states :
   const [showConv, setShowConv] = useState(true);
   const [isFirstCall, setIsFirstCall] = useState(false);
   // redux states:
   const { isOpen } = convertation;
+  const { userInfo } = userLogin;
 
   const showConvHandler = () => {
     setShowConv(!showConv);
@@ -37,7 +48,32 @@ const MessagesPage = ({
       closeConvertation();
       setIsFirstCall(true);
     }
-  }, [isFirstCall, resetGetMessages, closeConvertation]);
+
+    socket.removeListener("client-user-typing");
+    socket.removeListener("client-user-stop-typing");
+
+    socket.on("client-user-typing", (obj) => {
+      const { senderUserId, receivedUserId } = obj;
+      if (String(userInfo._id) === String(receivedUserId)) {
+        dispatch({
+          type: MESSAGE_GET_CONVERTATIONS_UPDATE_USER_TYPING,
+          payload: senderUserId,
+        });
+      }
+    });
+
+    socket.on("client-user-stop-typing", (obj) => {
+      const { senderUserId, receivedUserId } = obj;
+      if (String(userInfo._id) === String(receivedUserId)) {
+        dispatch({
+          type: MESSAGE_GET_CONVERTATIONS_UPDATE_USER_STOP_TYPING,
+          payload: senderUserId,
+        });
+      }
+    });
+
+
+  }, [userInfo, isFirstCall, resetGetMessages, closeConvertation,dispatch]);
 
   return (
     <Row>
@@ -90,6 +126,7 @@ const MessagesPage = ({
 const mapStateToProps = (state) => {
   return {
     convertation: state.convertation,
+    userLogin: state.userLogin,
   };
 };
 

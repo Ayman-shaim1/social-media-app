@@ -42,12 +42,7 @@ import {
   CONVERTATION_UPDATE_SET_OFFLINE,
 } from "./redux/convertation/convertationTypes";
 
-import { io } from "socket.io-client";
-
-const SERVER = "https://socialmedia01.herokuapp.com/";
-const socket = io(SERVER);
-
-console.log(process.env.APP_URL);
+import socket from "./socket";
 
 const App = ({
   userLogin,

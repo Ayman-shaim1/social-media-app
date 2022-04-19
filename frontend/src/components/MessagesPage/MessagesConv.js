@@ -31,6 +31,8 @@ import useDialog from "../../hooks/useDialog";
 import useAlert from "../../hooks/useAlert";
 import useDiffDate from "../../hooks/useDiffDate";
 
+import socket from "../../socket";
+
 let interval = null;
 
 const MessagesConv = ({
@@ -38,6 +40,7 @@ const MessagesConv = ({
   messageList,
   messageRemoveConvertation,
   showConv,
+  userLogin,
 
   sendMessage,
   removeConvertation,
@@ -66,6 +69,7 @@ const MessagesConv = ({
     error: messageRemoveConvertationError,
     success: messageRemoveConvertationSuccess,
   } = messageRemoveConvertation;
+  const { userInfo } = userLogin;
 
   // Ref's :
   const convBodyRef = useRef();
@@ -91,10 +95,24 @@ const MessagesConv = ({
     });
   };
 
+  const keyPressHandler = () => {
+    socket.emit("user-typing", {
+      senderUserId: userInfo._id,
+      receivedUserId: user && user._id,
+    });
+  };
+
+  const keyUpHandler = () => {
+    socket.emit("user-stop-typing", {
+      senderUserId: userInfo._id,
+      receivedUserId: user && user._id,
+    });
+  };
+
   useEffect(() => {
-    console.log("Hello convertation");
     convBodyRef.current.scrollTo(0, convBodyRef.current.scrollHeight * 100000);
     if (messageRemoveConvertationError) {
+      
       showAlert({
         type: "danger",
         title: "error",
@@ -222,6 +240,8 @@ const MessagesConv = ({
               placeholder="enter message ..."
               value={text}
               onChange={(e) => setText(e.target.value)}
+              onKeyPress={keyPressHandler}
+              onKeyUp={keyUpHandler}
             />
             <Button
               size="sm"
@@ -239,6 +259,7 @@ const MessagesConv = ({
 const mapStateToProps = (state) => {
   return {
     messageList: state.messageList,
+    userLogin: state.userLogin,
     convertation: state.convertation,
     messageRemoveConvertation: state.messageRemoveConvertation,
   };
