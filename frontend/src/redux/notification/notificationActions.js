@@ -19,10 +19,7 @@ import {
 } from "./notificationTypes";
 
 import axios from "axios";
-import { io } from "socket.io-client";
-
-const SERVER = "http://localhost:5000";
-const socket = io(SERVER);
+import socket from "../../socket";
 
 export const sendNotification = (id, title, text_content) => {
   return async (dispatch, getState) => {

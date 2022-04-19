@@ -70,10 +70,7 @@ import { sendNotification } from "../notification/notificationActions";
 
 import axios from "axios";
 
-import { io } from "socket.io-client";
-
-const SERVER = "http://localhost:5000";
-const socket = io(SERVER);
+import socket from "../../socket";
 
 export const login = (email, password) => {
   return (dispatch) => {
@@ -87,7 +84,6 @@ export const login = (email, password) => {
         const data = response.data;
         dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
         localStorage.setItem("userInfo", JSON.stringify(data));
-       
       })
       .catch((error) => {
         const err =
@@ -151,7 +147,6 @@ export const register = (name, email, avatar, password) => {
             `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet, autem eligendi! Tenetur excepturi quis enim doloribus repellat culpa facere ea?`
           )
         );
-        
       } else {
         const { data } = await axios.post(
           "/api/users",

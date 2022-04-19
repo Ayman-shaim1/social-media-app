@@ -43,10 +43,7 @@ import {
   MESSAGE_SEEN_TOAST_SUCCESS,
 } from "./messageTypes";
 import axios from "axios";
-import { io } from "socket.io-client";
-
-const SERVER = "http://localhost:5000";
-const socket = io(SERVER);
+import socket from "../../socket";
 
 export const getConvertations = () => {
   return async (dispatch, getState) => {
