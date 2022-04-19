@@ -34,6 +34,7 @@ const MessagesPage = ({
   // states :
   const [showConv, setShowConv] = useState(true);
   const [isFirstCall, setIsFirstCall] = useState(false);
+
   // redux states:
   const { isOpen } = convertation;
   const { userInfo } = userLogin;
@@ -43,6 +44,7 @@ const MessagesPage = ({
   };
 
   useEffect(() => {
+    console.log("Hello Messages Page");
     if (!isFirstCall) {
       resetGetMessages();
       closeConvertation();
@@ -54,7 +56,9 @@ const MessagesPage = ({
 
     socket.on("client-user-typing", (obj) => {
       const { senderUserId, receivedUserId } = obj;
+
       if (String(userInfo._id) === String(receivedUserId)) {
+        console.log(`user ${senderUserId} is typing ...`);
         dispatch({
           type: MESSAGE_GET_CONVERTATIONS_UPDATE_USER_TYPING,
           payload: senderUserId,
@@ -64,16 +68,16 @@ const MessagesPage = ({
 
     socket.on("client-user-stop-typing", (obj) => {
       const { senderUserId, receivedUserId } = obj;
+
       if (String(userInfo._id) === String(receivedUserId)) {
+        console.log(`user ${senderUserId} stop typing ...`);
         dispatch({
           type: MESSAGE_GET_CONVERTATIONS_UPDATE_USER_STOP_TYPING,
           payload: senderUserId,
         });
       }
     });
-
-
-  }, [userInfo, isFirstCall, resetGetMessages, closeConvertation,dispatch]);
+  }, [userInfo, isFirstCall, resetGetMessages, closeConvertation, dispatch]);
 
   return (
     <Row>

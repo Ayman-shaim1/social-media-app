@@ -152,6 +152,28 @@ const messageGetConvertationUpdateRemove = (state, payload) => {
   return newConvertations;
 };
 
+const messageGetConvertationUpdate_IsTyping = (state, payload, isTyping) => {
+  const newConvertations = [];
+  if (isTyping) {
+    for (let i = 0; i < state.convertations.length; i++) {
+      const objToPush = { ...state.convertations[i] };
+      if (String(state.convertations[i].user._id) === String(payload)) {
+        objToPush.user.isTyping = true;
+      }
+      newConvertations.push(objToPush);
+    }
+  } else {
+    for (let i = 0; i < state.convertations.length; i++) {
+      const objToPush = { ...state.convertations[i] };
+      if (String(state.convertations[i].user._id) === String(payload)) {
+        objToPush.user.isTyping = false;
+      }
+      newConvertations.push(objToPush);
+    }
+  }
+  return newConvertations;
+};
+
 export const messageGetConvertationsReducer = (
   state = { convertations: [] },
   action
@@ -193,23 +215,20 @@ export const messageGetConvertationsReducer = (
     case MESSAGE_GET_CONVERTATIONS_UPDATE_USER_TYPING:
       return {
         success: true,
-        convertations: state.convertations.map((convertation) => {
-          if (String(convertation.user._id) === String(payload)) {
-            convertation.user.isTyping = true;
-          }
-
-          return convertation;
-        }),
+        convertations: messageGetConvertationUpdate_IsTyping(
+          state,
+          payload,
+          true
+        ),
       };
     case MESSAGE_GET_CONVERTATIONS_UPDATE_USER_STOP_TYPING:
       return {
         success: true,
-        convertations: state.convertations.map((convertation) => {
-          if (String(convertation.user._id) === String(payload)) {
-            convertation.user.isTyping = false;
-          }
-          return convertation;
-        }),
+        convertations: messageGetConvertationUpdate_IsTyping(
+          state,
+          payload,
+          false
+        ),
       };
     case MESSAGE_GET_CONVERTATIONS_FAIL:
       return { convertations: [], error: payload };
