@@ -80,15 +80,19 @@ const MessagesPage = ({
 
       if (String(userInfo._id) === String(receivedUserId)) {
         if (isOpen && String(userConvertation._id) === String(senderUserId)) {
-          dispatch({
-            type: CONVERTATION_UPDATE_USER_STOP_TYPING,
-          });
+          setTimeout(() => {
+            dispatch({
+              type: CONVERTATION_UPDATE_USER_STOP_TYPING,
+            });
+          }, 600);
         }
 
-        dispatch({
-          type: MESSAGE_GET_CONVERTATIONS_UPDATE_USER_STOP_TYPING,
-          payload: senderUserId,
-        });
+        setTimeout(() => {
+          dispatch({
+            type: MESSAGE_GET_CONVERTATIONS_UPDATE_USER_STOP_TYPING,
+            payload: senderUserId,
+          });
+        }, 600);
       }
     });
   }, [
