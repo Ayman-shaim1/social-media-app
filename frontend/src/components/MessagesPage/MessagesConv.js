@@ -63,7 +63,7 @@ const MessagesConv = ({
 
   // redux states :
   const { messages, loading: messageListLoading } = messageList;
-  const { user } = convertation;
+  const { user, isOpen } = convertation;
   const {
     loading: messageRemoveConvertationLoading,
     error: messageRemoveConvertationError,
@@ -110,6 +110,8 @@ const MessagesConv = ({
   };
 
   useEffect(() => {
+    socket.removeListener("client-user-seen-convertation");
+  
     convBodyRef.current.scrollTo(0, convBodyRef.current.scrollHeight * 100000);
     if (messageRemoveConvertationError) {
       showAlert({
@@ -135,10 +137,27 @@ const MessagesConv = ({
           type: MESSAGE_GET_CONVERTATIONS_UPDATE_SEEN_ALL,
           payload: user._id,
         });
+        
+        socket.emit("user-seen-convertation", {
+          senderUserId: userInfo._id,
+          receivedUserId: user._id,
+        });
       }
     }
 
-    if (!user.isOnline) {
+    socket.on("client-user-seen-convertation", (obj) => {
+      const { senderUserId, receivedUserId } = obj;
+
+      if (String(userInfo._id) === String(receivedUserId)) {
+        if (isOpen && String(user._id) === String(senderUserId)) {
+          dispatch({
+            type: MESSAGE_GET_LIST_UPDATE_SEEN_ALL,
+          });
+        }
+      }
+    });
+
+    if (user && !user.isOnline) {
       if (!incSec) {
         setIncSen(true);
 
@@ -154,6 +173,8 @@ const MessagesConv = ({
     }
   }, [
     dispatch,
+    isOpen,
+    userInfo,
     incSec,
     isSeenAll,
     resetRemoveConvertation,

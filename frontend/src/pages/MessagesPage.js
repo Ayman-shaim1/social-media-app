@@ -19,6 +19,7 @@ import { resetGetMessages } from "../redux/message/messageActions";
 import {
   MESSAGE_GET_CONVERTATIONS_UPDATE_USER_TYPING,
   MESSAGE_GET_CONVERTATIONS_UPDATE_USER_STOP_TYPING,
+  
 } from "../redux/message/messageTypes";
 
 import {
@@ -49,7 +50,7 @@ const MessagesPage = ({
   };
 
   useEffect(() => {
-    console.log("Hello Messages Page");
+   
     if (!isFirstCall) {
       resetGetMessages();
       closeConvertation();

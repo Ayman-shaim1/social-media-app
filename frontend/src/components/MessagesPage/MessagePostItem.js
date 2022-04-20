@@ -43,7 +43,7 @@ const MessagePostItem = ({
   return (
     <div
       className={`message-post message-container ${
-        String(userInfo._id) === String(message.message_from)
+        message && String(userInfo._id) === String(message.message_from)
           ? "connected"
           : "other"
       }-user-message ${loading ? " message-loading" : ""}`}>
@@ -51,16 +51,16 @@ const MessagePostItem = ({
         <Card className="w-100 message-content">
           <Card.Header bg="light" className="d-flex justify-content-between">
             <div className="d-flex align-items-center">
-              <Link to={`/profile/${message.message_post.user._id}`}>
+              <Link to={`/profile/${message && message.message_post.user._id}`}>
                 <Avatar
-                  image={message.message_post.user.avatar}
-                  userId={message.message_post.user._id}
-                  isOnline={message.message_post.user.isOnline}
+                  image={message && message.message_post.user.avatar}
+                  userId={message && message.message_post.user._id}
+                  isOnline={message && message.message_post.user.isOnline}
                 />
               </Link>
-              <Link to={`/profile/${message.message_post.user._id}`}>
+              <Link to={`/profile/${message && message.message_post.user._id}`}>
                 <strong className="m-2">
-                  {message.message_post.user.name}
+                  {message && message.message_post.user.name}
                 </strong>
               </Link>
             </div>
@@ -68,22 +68,27 @@ const MessagePostItem = ({
               <Dropdown.Toggle size="sm" id="drp-post-btn"></Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <LinkContainer to={`/post/${message.message_post._id}`}>
+                <LinkContainer
+                  to={`/post/${message && message.message_post._id}`}>
                   <Dropdown.Item>
                     <i className="fa-solid fa-newspaper"></i> show post
                   </Dropdown.Item>
                 </LinkContainer>
 
                 <Dropdown.Divider></Dropdown.Divider>
-                <Dropdown.Item onClick={() => deleteMessage(message._id)}>
+                <Dropdown.Item
+                  onClick={() => deleteMessage(message && message._id)}>
                   <i className="fa-solid fa-trash-can"></i> delete message
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Card.Header>
           <Card.Body>
-            {message.message_post.text && <p>{message.message_post.text}</p>}
-            {message.message_post.media_url &&
+            {message && message.message_post.text && (
+              <p>{message.message_post.text}</p>
+            )}
+            {message &&
+            message.message_post.media_url &&
             String(message.message_post.media_url).includes(".mp4") ? (
               <Video src={message.message_post.media_url} />
             ) : (
@@ -99,8 +104,11 @@ const MessagePostItem = ({
         </Card>
 
         <div className="message-inf">
-          <small>{new Date(message.message_date).toDateString()}</small>
-          {String(userInfo._id) === String(message.message_from) &&
+          <small>
+            {new Date(message && message.message_date).toDateString()}
+          </small>
+          {message &&
+            String(userInfo._id) === String(message.message_from) &&
             message.isSeen && <small>seen</small>}
         </div>
       </div>

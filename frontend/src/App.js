@@ -22,7 +22,10 @@ import FindFriendsPage from "./pages/FindFriendsPage";
 import RequestsPage from "./pages/RequestsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
-import { seenToastMessages } from "./redux/message/messageActions";
+import {
+  seenToastMessages,
+  seenAllMessages,
+} from "./redux/message/messageActions";
 
 import {
   MESSAGE_GET_LIST_UPDATE_PUSH,
@@ -48,6 +51,7 @@ const App = ({
   userLogin,
   convertation,
   seenToastMessages,
+  seenAllMessages,
   messageGetConvertations,
   messageGetNotSeen,
   avatarOnline,
@@ -103,6 +107,12 @@ const App = ({
                 message: message,
                 isConvExiste: index !== -1 ? true : false,
               },
+            });
+
+            seenAllMessages(senderUser._id);
+            socket.emit("user-seen-convertation", {
+              senderUserId: userInfo._id,
+              receivedUserId: senderUser._id,
             });
 
             dispatch({
@@ -180,6 +190,7 @@ const App = ({
       }
     });
   }, [
+    seenAllMessages,
     isConnect,
     seenToastMessages,
     isOpen,
@@ -349,6 +360,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     seenToastMessages: () => dispatch(seenToastMessages()),
+    seenAllMessages: (data) => dispatch(seenAllMessages()),
   };
 };
 

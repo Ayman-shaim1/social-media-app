@@ -143,7 +143,7 @@ const ConvertationItem = ({
               convertationData.message.isConnectedUserSeend && (
                 <span className="me">Me :</span>
               )}
-              
+
             {convertationData.user.isTyping ? (
               <strong className="typing">typing ...</strong>
             ) : convertationData.message.message_text !== null ? (

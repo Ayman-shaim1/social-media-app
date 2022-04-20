@@ -70,7 +70,6 @@ export const messageGetNotSeenReducer = (state = {}, action) => {
 const messageGetConvertationUpdate = (state, payload) => {
   let newConvertations = [];
   payload.message.isTyping = false;
-  console.log(payload);
 
   if (payload.isConvExiste) {
     for (let i = 0; i < state.convertations.length; i++) {
@@ -117,8 +116,6 @@ const messageGetConvertationUpdate = (state, payload) => {
   newConvertations.sort((a, b) => {
     return new Date(b.message.message_date) - new Date(a.message.message_date);
   });
-
-  console.log(newConvertations);
 
   return newConvertations;
 };
@@ -239,6 +236,16 @@ export const messageGetConvertationsReducer = (
   }
 };
 
+// change state functions :
+const messageListUpdateSeenAllMessages = (state) => {
+  const newMessages = [];
+  for (let i = 0; i < state.messages.length; i++) {
+    const objToPush = { ...state.messages[i] };
+    objToPush.isSeen = true;
+    newMessages.push(objToPush);
+  }
+  return newMessages;
+};
 export const messageListReducer = (state = { messages: [] }, action) => {
   const { type, payload } = action;
   switch (type) {
@@ -263,10 +270,11 @@ export const messageListReducer = (state = { messages: [] }, action) => {
       };
     case MESSAGE_GET_LIST_UPDATE_SEEN_ALL:
       return {
-        messages: state.messages.map((message) => {
-          message.isSeen = true;
-          return message;
-        }),
+        // messages: state.messages.map((message) => {
+        //   message.isSeen = true;
+        //   return message;
+        // }),
+        messages: messageListUpdateSeenAllMessages(state),
         success: true,
       };
     case MESSAGE_GET_LIST_RESET:
