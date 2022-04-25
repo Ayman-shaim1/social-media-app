@@ -212,7 +212,8 @@ const App = ({
         <MessagesToastsContainer />
       )}
       <main className="p-2">
-        <Container fluid>
+        <Container
+          fluid={window.location.pathname.toLowerCase() === "/messages"}>
           <Routes>
             <Route exact path="/Login" element={<LoginPage />} />
             <Route exact path="/Register" element={<RegisterPage />} />
