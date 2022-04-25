@@ -108,7 +108,7 @@ const MessagesPage = ({
 
   return (
     <Row>
-      <Col xl={4} lg={4} md={12} sm={12}>
+      <Col xl={4} lg={5} md={12} sm={12}>
         <Card className="convertations-container">
           <Card.Header>
             <div className="d-flex justify-content-start">
@@ -143,7 +143,7 @@ const MessagesPage = ({
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={8} lg={8} md={12} sm={12}>
+      <Col xl={8} lg={7} md={12} sm={12}>
         {isOpen ? (
           <MessagesConv showConv={() => setShowConv(true)} />
         ) : (

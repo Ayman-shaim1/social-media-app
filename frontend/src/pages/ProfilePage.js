@@ -335,7 +335,7 @@ const ProfilePage = ({
   return (
     <>
       <Row>
-        <Col xl={3} lg={3} md={2} sm={12}></Col>
+        <Col xl={3} lg={3} md={1} sm={12}></Col>
         <Col xl={6} lg={6} md={10} sm={12}>
           {getByIdUserLoading ? (
             <Loader />
@@ -424,7 +424,7 @@ const ProfilePage = ({
             </Alert>
           )}
         </Col>
-        <Col xl={3} lg={3} md={2} sm={12}></Col>
+        <Col xl={3} lg={3} md={1} sm={12}></Col>
       </Row>
     </>
   );

@@ -110,7 +110,6 @@ io.on("connection", (socket) => {
   socket.on("user-seen-convertation", (obj) => {
     io.emit("client-user-seen-convertation", obj);
   });
-  
 });
 
 const PORT = process.env.PORT || 5000;
