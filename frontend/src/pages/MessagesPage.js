@@ -144,6 +144,7 @@ const MessagesPage = ({
         </Card>
       </Col>
       <Col xl={8} lg={7} md={12} sm={12}>
+        
         {isOpen ? (
           <MessagesConv showConv={() => setShowConv(true)} />
         ) : (

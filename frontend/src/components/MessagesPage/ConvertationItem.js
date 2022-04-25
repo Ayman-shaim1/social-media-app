@@ -36,6 +36,7 @@ const ConvertationItem = ({
   const cutMessageHandler = (message_text) => {
     if (String(message_text).length >= 20) {
       return String(message_text).slice(0, 20) + "...";
+      
     } else {
       return String(message_text);
     }

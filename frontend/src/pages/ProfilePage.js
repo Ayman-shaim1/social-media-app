@@ -425,6 +425,7 @@ const ProfilePage = ({
           )}
         </Col>
         <Col xl={3} lg={3} md={1} sm={12}></Col>
+        
       </Row>
     </>
   );
